@@ -1,0 +1,54 @@
+.siderbar-box {
+    height: 100%;
+}
+
+.ant-menu-inline:not(.ant-menu-inline-collapsed),
+.ant-menu-vertical:not(.ant-menu-inline-collapsed),
+.ant-menu-vertical-left:not(.ant-menu-inline-collapsed) {
+    border-right: none;
+    width: 200px;
+
+}
+
+.ant-menu-inline .ant-menu-selected::after,
+.ant-menu-inline .ant-menu-item-selected::after {
+    display: none;
+}
+
+.ant-menu-inline .ant-menu-item {
+    border-radius: 4px;
+}
+
+// .anticon {
+//     color: #f00;
+// }
+
+.ant-menu {
+    padding-top: 10px;
+}
+
+i[level='0'],
+span[level='0'] {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.ant-menu-submenu {
+    .ant-menu-item {
+        font-weight: normal;
+        color: rgba(0, 0, 0, 0.65);
+
+        &.ant-menu-item-selected {
+            color: #1890ff;
+        }
+    }
+}
+
+.ant-menu-item {
+    color: rgba(0, 0, 0, 0.65);
+
+    &:hover,
+    &.ant-menu-item-selected {
+        color: #1890ff;
+    }
+}

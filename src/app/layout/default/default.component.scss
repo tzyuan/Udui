@@ -1,0 +1,15 @@
+.layout-body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.layout-content {
+    padding: 20px;
+    overflow: hidden;
+    .container{
+        height: 100%;
+        overflow: auto;
+        background-color: #fff;
+        padding: 20px;
+    }
+}

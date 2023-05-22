@@ -1,0 +1,33 @@
+
+<div class="ice-layout-header ice-layout-header-normal iceDesignLayoutHeader">
+    <div class="logo-box" [ngClass]="{'is-collapsed': layout.isCollapsed}">
+        <div class="logo">
+            NG后台模板
+        </div>
+        <div class="collapsed-box" (click)="sidebarCollapsed()">
+            <i nz-icon nzType="menu" nzTheme="outline"></i>
+        </div>
+        <div class="header-nav">
+            <ul nz-menu nzMode="horizontal">
+                <ng-container *ngFor="let item of modules">
+                    <li nz-menu-item>
+                        <a>{{item.title}}</a>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+
+    <div class="iceDesignLayoutHeaderMenu">
+        <div class="iceDesignHeaderUserpannel" nz-dropdown [nzDropdownMenu]="menu">
+            <div class="userProfile"><span class="userName">{{userName}}</span></div>
+            <i nz-icon nzType="down" nzTheme="outline" class="iconDown"></i>
+        </div>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="logout()"><i nz-icon nzType="logout" nzTheme="outline"></i>退出
+                </li>
+            </ul>
+        </nz-dropdown-menu>
+    </div>
+</div>

@@ -2,5 +2,5 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: ''
+  SERVER_URL: ''
 };
