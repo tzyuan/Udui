@@ -23,12 +23,12 @@ const routes: Routes = [
       {
         path: 'account',
         loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule),
-        canActivate: [ModuleActivate]
+        canActivate: [ModuleActivate], data: { breadcrumb: '账号管理' },
       },
       {
         path: 'order',
         loadChildren: () => import('./order/order.module').then(mod => mod.OrderModule),
-        canActivate: [ModuleActivate]
+        canActivate: [ModuleActivate], data: { breadcrumb: '订单管理' },
       },
       {
         path: 'merchant',

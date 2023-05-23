@@ -7,13 +7,13 @@
   <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: sidebarData }"></ng-container>
   <ng-template #menuTpl let-menus>
     <ng-container *ngFor="let menu of menus">
-      <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="menu.level * 24" [nzDisabled]="menu.disabled"
-          [nzSelected]="menu.selected">
+      <li *ngIf="!menu.children" nz-menu-item nzMatchRouter [nzPaddingLeft]="menu.level * 24"
+        [nzDisabled]="menu.disabled" [nzSelected]="menu.selected">
         <i nz-icon [nzType]="menu.icon" nzTheme="outline" *ngIf="menu.icon"></i>
-        <span>{{ menu.title }}</span>
+        <a [routerLink]="menu.url">{{ menu.title }}</a>
       </li>
       <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24" [nzOpen]="menu.open" [nzTitle]="menu.title"
-          [nzIcon]="menu.icon" [nzDisabled]="menu.disabled">
+        [nzIcon]="menu.icon" [nzDisabled]="menu.disabled">
         <ul>
           <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
         </ul>

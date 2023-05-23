@@ -6,10 +6,17 @@
 .layout-content {
     padding: 20px;
     overflow: hidden;
-    .container{
-        height: 100%;
-        overflow: auto;
+    display: flex;
+    flex-direction: column;
+    .page-title{
         background-color: #fff;
+        padding: 15px 20px ;
+        border-bottom: 1px solid #eee;
+    }
+    .page-content{
+        background-color: #fff;
+        overflow: auto;
         padding: 20px;
+        flex: 1;
     }
 }

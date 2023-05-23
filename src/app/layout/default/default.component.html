@@ -4,7 +4,11 @@
     <nz-sider><app-layout-default-sidebar></app-layout-default-sidebar>
     </nz-sider>
     <nz-content class="layout-content">
-      <div class="container">
+      <div class="page-title">
+        <!-- <h2 nz-typography>{{pageTitle}}</h2> -->
+        <nz-breadcrumb nzAutoGenerate></nz-breadcrumb>
+      </div>
+      <div class="page-content">
         <router-outlet></router-outlet>
       </div>
     </nz-content>

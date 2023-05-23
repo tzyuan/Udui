@@ -17,12 +17,10 @@ export class LayoutDefaultComponent implements OnInit {
   constructor(
     private layout: LayoutService,
     private http: HttpClient,
-    private cookies: CookiesService
-  ) { }
+    private cookies: CookiesService,
+  ) { 
+  }
   ngOnInit() {
-    if (this.cookies.getCookie('isRead') === '0') {
-      this.previewVisible = true;
-    }
   }
   sidebarCollapsed = () => {
     this.layout.isCollapsedEventer.emit(!this.layout.isCollapsed);
