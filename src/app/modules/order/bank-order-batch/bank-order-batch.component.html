@@ -1,0 +1,78 @@
+<div class="mb20">
+    <button nz-button nzType="primary" (click)="bankCardVisible=true">选择银行卡</button>
+</div>
+<nz-table class="mb20" #nzTable [nzData]="orderData" nzShowPagination="false">
+    <thead>
+        <tr>
+            <th>开户姓名</th>
+            <th>银行名称</th>
+            <th>银行卡号</th>
+            <th>开户地址</th>
+            <th>充值金额</th>
+            <th>备注信息</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let i of nzTable.data">
+            <td>{{i.account_name}}</td>
+            <td>{{i.bank_name}}</td>
+            <td>{{i.card_no}}</td>
+            <td>{{i.bank_address}}</td>
+            <td>
+                <nz-input-number [(ngModel)]="i.amount" [nzStep]="1" [nzStatus]="i.amount<=0?'error':''"></nz-input-number>
+            </td>
+            <td>
+                <input nz-input [(ngModel)]="i.memo">
+                <div>
+                    <label nz-checkbox [(ngModel)]="i.only_private">仅限私卡转入</label>
+                    <label nz-checkbox [(ngModel)]="i.only_single">不可拆单</label>
+                    <label nz-checkbox [(ngModel)]="i.need_receipt">需要电子回单</label>
+                </div>
+            </td>
+            <td>
+                <a (click)="del(i)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="mb20" style="max-width: 600px;">
+    <form nz-form [formGroup]="pwdForm">
+        <nz-form-item nzFlex>
+            <nz-form-label [nzSm]="4" nzRequired>谷歌验证码</nz-form-label>
+            <nz-form-control [nzSm]="14">
+                <input nz-input formControlName="googleCode">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
+            <nz-form-label [nzSm]="4" nzRequired>出款密码</nz-form-label>
+            <nz-form-control [nzSm]="14">
+                <input nz-input formControlName="payPassword">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
+            <nz-form-control [nzOffset]="4">
+                <nz-space>
+                    <button *nzSpaceItem nz-button nzType="primary" (click)="submit()">提交</button>
+                    <button *nzSpaceItem nz-button (click)="back()">返回</button>
+                </nz-space>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>
+
+
+
+<!-- 选择银行卡抽屉 -->
+<nz-drawer [(nzVisible)]="bankCardVisible" nzTitle="选择银行卡" (nzOnClose)="bankCardVisible=false" nzWidth="80%"
+    [nzFooter]="bankCardFooter">
+    <ng-container *nzDrawerContent>
+        <app-bank-order-batch-bank-card #bankCard [orderData]="orderData"></app-bank-order-batch-bank-card>
+    </ng-container>
+    <ng-template #bankCardFooter>
+        <nz-space style="float: right;">
+            <button *nzSpaceItem nz-button nzType="primary" (click)="checkedBankCard()">确定</button>
+            <button *nzSpaceItem nz-button (click)="bankCardVisible=false">取消</button>
+        </nz-space>
+    </ng-template>
+</nz-drawer>

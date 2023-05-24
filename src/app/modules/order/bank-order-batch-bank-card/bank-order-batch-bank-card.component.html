@@ -1,0 +1,22 @@
+<nz-table #bankCards [nzShowPagination]="false" [nzFrontPagination]="false" nzSize="small" [nzData]="bankCardData">
+    <thead>
+        <tr>
+            <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onAllChecked($event)"></th>
+            <th>开户姓名</th>
+            <th>银行名称</th>
+            <th>银行卡号</th>
+            <th>开户地址</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of bankCards.data">
+            <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)">
+            </td>
+            <td>{{ data.account_name }}</td>
+            <td>{{ data.bank_name }}</td>
+            <td>{{ data.card_no }}</td>
+            <td>{{ data.bank_address }}</td>
+        </tr>
+    </tbody>
+</nz-table>

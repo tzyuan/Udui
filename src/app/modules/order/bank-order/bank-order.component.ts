@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { NzDrawerService } from 'ng-zorro-antd/drawer';
+import { BankOrderBatchComponent } from '../bank-order-batch/bank-order-batch.component';
 @Component({
   selector: 'app-bank-order',
   templateUrl: './bank-order.component.html',
@@ -10,7 +12,22 @@ export class BankOrderComponent implements OnInit {
   orderData: any = [];
   min = '';
   max = '';
-  constructor() { }
+  constructor(
+    private drawer: NzDrawerService
+  ) { }
+  createOrder = () => {
+    const createDrawer = this.drawer.create({
+      nzTitle: '创建银行卡订单',
+      nzContent: BankOrderBatchComponent,
+      nzWidth: '90%',
+      nzMaskClosable: false,
+      nzKeyboard: false,
+      nzClosable: false
+    });
+    createDrawer.afterClose.subscribe(res => {
+      console.log(res);
+    })
+  }
   ngOnInit(): void {
     for (let i = 0; i < 35; i++) {
       this.orderData = [...this.orderData, {

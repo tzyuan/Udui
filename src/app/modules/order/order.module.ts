@@ -7,6 +7,8 @@ import { BankOrderComponent } from './bank-order/bank-order.component';
 import { WithdrawalOrderComponent } from './withdrawal-order/withdrawal-order.component';
 import { BankOrderEditComponent } from './bank-order-edit/bank-order-edit.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { BankOrderBatchComponent } from './bank-order-batch/bank-order-batch.component';
+import { BankOrderBatchBankCardComponent } from './bank-order-batch-bank-card/bank-order-batch-bank-card.component';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     BankCardComponent,
     BankOrderComponent,
     WithdrawalOrderComponent,
-    BankOrderEditComponent
+    BankOrderEditComponent,
+    BankOrderBatchComponent,
+    BankOrderBatchBankCardComponent,
   ],
   imports: [
     CommonModule,
