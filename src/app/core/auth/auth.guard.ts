@@ -21,8 +21,8 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-    const name = this.cookies.getCookie('name');
-    if (name) {
+    const token = this.cookies.getCookie('token');
+    if (token) {
       return true;
     }
     this.router.navigateByUrl('/passport/login');

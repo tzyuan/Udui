@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ResetPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
+    private http: HttpClient
   ) {
 
   }
@@ -22,6 +24,21 @@ export class ResetPasswordComponent implements OnInit {
   });
   loading = false;
 
+  doRepwd = () => {
+    this.loading = true;
+    this.http.post('/admin/user/change-login-pwd', {
+      new_password: '',
+      one_code: ''
+    }).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (error) => { },
+      complete: () => { this.loading = false; }
+    })
+  }
+
   ngOnInit(): void {
   }
+
 }

@@ -120,12 +120,9 @@ export class LayoutDefaultSidebarComponent implements OnInit {
   private destroy$ = new Subject<void>();
   constructor(
     private layout: LayoutService,
-    private iconService: NzIconService,
     private injector: Injector,
   ) {
-    this.iconService.fetchFromIconfont({
-      scriptUrl: `https://at.alicdn.com/t/font_1508701_agl1n5twy1i.js`
-    });
+   
   }
   ngOnInit() {
     try {
@@ -139,14 +136,16 @@ export class LayoutDefaultSidebarComponent implements OnInit {
         )
         .subscribe(() => {
           const breadcrumbs = this.getBreadcrumbs(activatedRoute.root);
-          const activatedUrl = breadcrumbs[breadcrumbs.length - 1].url;
-          this.sidebarData.forEach(item => {
-            if (item.children) {
-              if (item.children.filter(menu => menu.url === activatedUrl).length === 1) {
-                item.open = true;
+          if(breadcrumbs[breadcrumbs.length - 1]){
+            const activatedUrl = breadcrumbs[breadcrumbs.length - 1].url;
+            this.sidebarData.forEach(item => {
+              if (item.children) {
+                if (item.children.filter(menu => menu.url === activatedUrl).length === 1) {
+                  item.open = true;
+                }
               }
-            }
-          })
+            })
+          }
         });
     } catch (error) {
 

@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="ice-layout-header ice-layout-header-normal iceDesignLayoutHeader">
     <div class="logo-box" [ngClass]="{'is-collapsed': layout.isCollapsed}">
         <div class="logo">
@@ -30,4 +30,11 @@
             </ul>
         </nz-dropdown-menu>
     </div>
+</div> -->
+
+<div class="header">
+    <nz-space nzAlign="center">
+        <div *nzSpaceItem class="space-item" >你好,{{userName}}</div>
+        <div *nzSpaceItem class="space-item btn" (click)="logout()">退出登录</div>
+    </nz-space>
 </div>

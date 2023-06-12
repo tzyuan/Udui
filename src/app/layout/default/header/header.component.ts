@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/shared/services/layout/layout.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-layout-default-header',
@@ -14,9 +15,9 @@ export class LayoutDefaultHeaderComponent implements OnInit {
   constructor(
     private cookies: CookiesService,
     private router: Router,
-    public layout: LayoutService
+    private modal: NzModalService,
   ) { }
-  userName = this.cookies.getCookie('name');
+  userName = this.cookies.getCookie('username');
   modules = [
     { title: 'module1' },
     { title: 'module2' },
@@ -25,14 +26,18 @@ export class LayoutDefaultHeaderComponent implements OnInit {
   ];
 
   logout = () => {
-    this.cookies.clearAll();
-    window.sessionStorage.clear();
-    this.router.navigate(['/passport/login']);
+    this.modal.confirm({
+      nzTitle: '退出登录',
+      nzContent: '您确定要这么做吗?',
+      nzOnOk: () => {
+        this.cookies.clearAll();
+        window.sessionStorage.clear();
+        this.router.navigate(['/passport/login']);
+      }
+    })
+
   }
 
-  sidebarCollapsed = () => {
-    this.layout.isCollapsedEventer.emit(!this.layout.isCollapsed);
-  }
 
   ngOnInit() {
   }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 
@@ -19,11 +20,14 @@ export class LoginComponent implements OnInit {
     private http: HttpClient,
     private common: CommonService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private message: NzMessageService
   ) { }
   loginForm = this.fb.group({
-    name: [null, Validators.required],
-    pwd: [null, Validators.required],
+    name: ['zhang', Validators.required],
+    pwd: ['aaa', Validators.required],
+    code: ['xxx', Validators.required],
+    remember: [true]
   });
 
   loading = false;
@@ -33,16 +37,36 @@ export class LoginComponent implements OnInit {
       this.cookies.clearAll();
       window.localStorage.clear();
       window.sessionStorage.clear();
-      this.cookies.setCookie('name', '测试用户');
-      this.router.navigateByUrl('');
+      // this.cookies.setCookie('name', '测试用户', 12);
+      // this.router.navigateByUrl('');
+      this.loading = true;
+      this.http.get<any>(`/admin/user/login?username=${this.loginForm.value.name}&password=${this.loginForm.value.pwd}&one_code=${this.loginForm.value.code}`)
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            let rememberTime = this.loginForm.value.remember ? 7 * 24 : 24;
+            this.cookies.setCookie('id', res.id, rememberTime);
+            this.cookies.setCookie('merchant_id', res.merchant_id, rememberTime);
+            this.cookies.setCookie('username', res.username, rememberTime);
+            this.cookies.setCookie('token', res.token.token, rememberTime);
+            this.message.success(`${res.username},欢迎登录!`)
+            this.router.navigateByUrl('/');
+          },
+          error: (e) => {
+            console.log('login error');
+          },
+          complete: () => {
+            console.log('login complete');
+            this.loading = false;
+          }
+        })
     }
   }
   ngOnInit() {
-    this.cookies.clearAll();
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      this.cookies.setCookie('name', '测试用户');
-      this.router.navigateByUrl('');
+    console.log(111);
+    // this.cookies.clearAll();
+    // window.localStorage.clear();
+    // window.sessionStorage.clear();
   }
 
 }

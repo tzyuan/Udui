@@ -46,11 +46,58 @@ export class DefaultInterceptor implements HttpInterceptor {
     constructor(
         private injector: Injector,
         private cookies: CookiesService,
-        private router: Router
+        private router: Router,
+        private message: NzMessageService,
+        private modal: NzModalService
     ) { }
-    
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<Response>> {
-        return next.handle(req);;
+        let url = req.url;
+        url = environment.SERVER_URL + url;
+        let reReq = req.clone({ url })
+
+
+        if (this.cookies.getCookie('token')) {
+            let httpHeaders = new HttpHeaders()
+                .set('Authorization', `Bearer ${this.cookies.getCookie('token')}`);
+            reReq = req.clone({ url, headers: httpHeaders });
+        }
+
+        return next.handle(reReq).pipe(
+            mergeMap((event: any) => {
+                console.log(event);
+                // 允许统一对请求错误处理
+                if (event instanceof HttpResponseBase) {
+                    if (event.status === 200) {
+                        if (event instanceof HttpResponse) {
+                            if (event.body.code === 200) {
+                                return of(new HttpResponse(Object.assign({ body: event.body.data })));
+                            } else {
+                                return throwError({
+                                    error: {
+                                        ...event.body, ...{ codeError: true }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    // const handleData = this.handleData(event);
+                    // return handleData;
+                }
+                // 若一切都正常，则后续操作
+                return of(event);
+            }),
+            catchError((error: HttpErrorResponse) => {
+                console.log(error);
+                if (error.error.code) {
+                    this.message.error(error.error.message);
+                } else {
+                    this.modal.error({ nzTitle: '系统错误', nzContent: error.message });
+                }
+
+                return throwError(error.error)
+            })
+        );
     }
 
 }
