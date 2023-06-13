@@ -1,24 +1,23 @@
 <nz-space>
     <input *nzSpaceItem nz-input [(ngModel)]="subAccount" placeholder="请输入子账号用户名">
-    <input *nzSpaceItem nz-input [(ngModel)]="subName" placeholder="请输入子账号昵称">
-    <button *nzSpaceItem nz-button nzType="primary">立即查询</button>
-    <button *nzSpaceItem nz-button nzType="primary"><span nz-icon nzType="user-add" nzTheme="outline"></span>添加子账号</button>
+    <button *nzSpaceItem nz-button nzType="primary" (click)="getList()" [nzLoading]="loading">立即查询</button>
+    <button *nzSpaceItem nz-button nzType="primary" (click)="addSubAccount()"><span nz-icon nzType="user-add" nzTheme="outline"></span>添加子账号</button>
 </nz-space>
 <nz-divider></nz-divider>
-<nz-table #nzTable [nzData]="subAaccountData" [nzPageSize]="10">
+<nz-table #nzTable [nzData]="subAaccountData" nzFrontPagination="false" [nzLoading]="loading">
     <thead>
         <tr>
-            <th>子账号登录名</th>
-            <th>子账号昵称</th>
+            <th>子账号用户名</th>
+            <th>子账号权限</th>
             <th>最近登录时间</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let i of nzTable.data">
-            <td>{{i.subAccount}}</td>
-            <td>{{i.subName}}</td>
-            <td>{{i.lastLogin}}</td>
+            <td>{{i.username}}</td>
+            <td>{{i.role}}</td>
+            <td>{{i.last_login_time}}</td>
             <td>
                 <a href="#">编辑</a>
                 <nz-divider nzType="vertical"></nz-divider>

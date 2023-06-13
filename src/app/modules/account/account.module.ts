@@ -6,13 +6,15 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { ResetPayPasswordComponent } from './reset-pay-password/reset-pay-password.component';
 import { SubAccountComponent } from './sub-account/sub-account.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AddSubAccountComponent } from './add-sub-account/add-sub-account.component';
 
 
 @NgModule({
   declarations: [
     ResetPasswordComponent,
     ResetPayPasswordComponent,
-    SubAccountComponent
+    SubAccountComponent,
+    AddSubAccountComponent
   ],
   imports: [
     CommonModule,

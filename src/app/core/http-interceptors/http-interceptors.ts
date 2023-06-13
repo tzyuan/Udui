@@ -60,8 +60,15 @@ export class DefaultInterceptor implements HttpInterceptor {
         if (this.cookies.getCookie('token')) {
             let httpHeaders = new HttpHeaders()
                 .set('Authorization', `Bearer ${this.cookies.getCookie('token')}`);
+            // if (reReq.method === 'POST' || reReq.method === 'DEL' || reReq.method === 'PATCH') {
+            //     httpHeaders = httpHeaders.set('Content-Type', 'application/x-www-form-urlencoded');
+            // }
             reReq = req.clone({ url, headers: httpHeaders });
         }
+
+        console.log(reReq.method);
+        console.log(reReq.body);
+        console.log(reReq);
 
         return next.handle(reReq).pipe(
             mergeMap((event: any) => {

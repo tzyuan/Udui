@@ -27,13 +27,13 @@ export class ResetPasswordComponent implements OnInit {
   doRepwd = () => {
     this.loading = true;
     this.http.post('/admin/user/change-login-pwd', {
-      new_password: '',
-      one_code: ''
+      new_password: this.form.value.newPassword,
+      one_code: this.form.value.googleCode
     }).subscribe({
       next: (res) => {
         console.log(res);
       },
-      error: (error) => { },
+      error: (error) => { this.loading = false; },
       complete: () => { this.loading = false; }
     })
   }
