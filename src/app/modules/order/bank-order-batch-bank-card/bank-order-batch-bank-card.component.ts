@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 interface BankCard {
   id: number;
@@ -5,6 +6,7 @@ interface BankCard {
   bank_name: string;
   card_no: string;
   bank_address: string;
+  status: number;
 }
 @Component({
   selector: 'app-bank-order-batch-bank-card',
@@ -18,7 +20,9 @@ export class BankOrderBatchBankCardComponent implements OnInit {
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<number>();
-
+  constructor(
+    private http: HttpClient
+  ) { }
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
       this.setOfCheckedId.add(id);
@@ -42,16 +46,27 @@ export class BankOrderBatchBankCardComponent implements OnInit {
     this.refreshCheckedStatus();
   }
 
-
   ngOnInit(): void {
-    for (let i = 0; i < 33; i++) {
-      this.bankCardData = [...this.bankCardData, {
-        id: parseInt((Math.random() * 100000).toFixed(0)),
-        bank_name: ['建设银行', '中国银行', '工商银行', '农业银行'][parseInt((Math.random() * 4).toFixed())],
-        bank_address: `上海市黄浦区xxxx街xxxx号`,
-        card_no: (Math.random() * 100000000).toFixed(0),
-        account_name: `!@#$%@#!$`
-      }]
-    }
+    this.loading = true;
+    console.log(111);
+    this.http.get<BankCard[]>('/admin/bank-cards').subscribe({
+      next: (res: BankCard[]) => {
+        this.loading = false;
+        this.bankCardData = res.filter(item => item.status === 1)
+      },
+      error: (err) => {
+        this.loading = false;
+
+      }
+    })
+    // for (let i = 0; i < 33; i++) {
+    //   this.bankCardData = [...this.bankCardData, {
+    //     id: parseInt((Math.random() * 100000).toFixed(0)),
+    //     bank_name: ['建设银行', '中国银行', '工商银行', '农业银行'][parseInt((Math.random() * 4).toFixed())],
+    //     bank_address: `上海市黄浦区xxxx街xxxx号`,
+    //     card_no: (Math.random() * 100000000).toFixed(0),
+    //     account_name: `!@#$%@#!$`
+    //   }]
+    // }
   }
 }

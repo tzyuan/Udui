@@ -1,26 +1,37 @@
 <div class="mb20">
     <button nz-button nzType="primary" (click)="bankCardVisible=true">选择银行卡</button>
 </div>
-<nz-table class="mb20" #nzTable [nzData]="orderData" nzShowPagination="false">
+<nz-table class="mb20" #nzTable [nzData]="orderData" nzSize="small" [nzShowPagination]="false">
     <thead>
         <tr>
-            <th>开户姓名</th>
-            <th>银行名称</th>
-            <th>银行卡号</th>
-            <th>开户地址</th>
+            <th>银行卡</th>
             <th>充值金额</th>
+            <th>资金类型</th>
             <th>备注信息</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let i of nzTable.data">
-            <td>{{i.account_name}}</td>
-            <td>{{i.bank_name}}</td>
-            <td>{{i.card_no}}</td>
-            <td>{{i.bank_address}}</td>
             <td>
-                <nz-input-number [(ngModel)]="i.amount" [nzStep]="1" [nzStatus]="i.amount<=0?'error':''"></nz-input-number>
+                <span nz-typography><strong>{{i.card_no}}</strong> </span>
+                <span style="font-size: 12px;" nz-typography nzType="secondary">({{i.account_name}})</span>
+                <br>
+                <span nz-typography>{{i.bank_name}} </span>
+                <br>
+                <span nz-typography nzType="secondary">{{i.bank_address}}</span>
+            </td>
+            <td>
+                <nz-input-number [(ngModel)]="i.amount" [nzStep]="1"
+                    [nzStatus]="i.amount<=0?'error':''"></nz-input-number>
+            </td>
+            <td>
+                <nz-select style="width:100px;" [(ngModel)]="i.fund_type" name="value" nzPlaceHolder="" nzAllowClear
+                    [nzStatus]="!i.fund_type?'error':''">
+                    <nz-option *ngFor="let option of fundTypeData" [nzLabel]="option.label"
+                        [nzValue]="option.value"></nz-option>
+                </nz-select>
+
             </td>
             <td>
                 <input nz-input [(ngModel)]="i.memo">
@@ -53,8 +64,9 @@
         <nz-form-item nzFlex>
             <nz-form-control [nzOffset]="4">
                 <nz-space>
-                    <button *nzSpaceItem nz-button nzType="primary" (click)="submit()">提交</button>
-                    <button *nzSpaceItem nz-button (click)="back()">返回</button>
+                    <button *nzSpaceItem nz-button nzType="primary" (click)="submit()"
+                        [nzLoading]="submitLoading">提交</button>
+                    <button *nzSpaceItem nz-button (click)="back()" [disabled]="submitLoading">返回</button>
                 </nz-space>
             </nz-form-control>
         </nz-form-item>

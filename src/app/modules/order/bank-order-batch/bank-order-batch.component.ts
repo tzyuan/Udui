@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzDrawerRef } from 'ng-zorro-antd/drawer';
-import { BankOrderBatchBankCardComponent } from '../bank-order-batch-bank-card/bank-order-batch-bank-card.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { HttpClient } from '@angular/common/http';
+import { Observable, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-bank-order-batch',
@@ -15,26 +16,66 @@ export class BankOrderBatchComponent implements OnInit {
   constructor(
     private drawerRef: NzDrawerRef,
     private fb: FormBuilder,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private http: HttpClient,
   ) { }
   // 银行卡订单
   orderData: any[] = [];
+  submitLoading = false;
+  fundTypeData = [
+    { label: '大混资金', value: 1 },
+    { label: 'BC资金', value: 2 },
+    { label: '常规资金', value: 3 }
+  ]
   pwdForm = this.fb.group({
     googleCode: [null, [Validators.required]],
     payPassword: [null, [Validators.required]]
-  })
+  });
   del = (order: any) => {
-    this.orderData = this.orderData.filter(item => item.card_no !== order.card_no);
+    this.orderData = this.orderData.filter(item => item.bank_card_id !== order.bank_card_id);
   }
   submit = () => {
     let isError = false;
     this.orderData.forEach(order => {
       order.amount = order.amount ? order.amount : 0;
       if (order.amount === 0) { isError = true; }
+      if (!order.fund_type) { isError = true; }
     });
 
     if (!isError && this.pwdForm.valid) {
-      this.drawerRef.close('submit');
+      let orderPost: Observable<any>[] = [];
+      this.submitLoading = true;
+      // 生成银行卡订单请求
+      this.orderData.forEach(order => {
+        const postData = {
+          bank_card_id: order.bank_card_id,
+          amount: order.amount,
+          fund_type: order.fund_type,
+          only_private: order.only_private ? 1 : 0,
+          only_single: order.only_single ? 1 : 0,
+          need_receipt: order.need_receipt ? 1 : 0,
+          memo: order.memo
+        }
+        console.log(postData);
+        orderPost.push(this.http.post('/admin/bank-card-orders', postData))
+      });
+
+      // 执行订单
+      forkJoin(orderPost).subscribe({
+        next: (res) => {
+          console.log('res');
+          console.log(res);
+          this.message.success('创建成功');
+          this.drawerRef.close('submit');
+          this.submitLoading = false;
+        },
+        error: (error) => {
+          console.log('error');
+          console.log(error);
+          this.submitLoading = false;
+        },
+      })
+
       return;
     }
     Object.values(this.pwdForm.controls).forEach(control => {
@@ -44,8 +85,6 @@ export class BankOrderBatchComponent implements OnInit {
       }
     });
     this.message.error('请检查必填项');
-
-
   }
   back = () => {
     this.drawerRef.close('back');
@@ -56,12 +95,14 @@ export class BankOrderBatchComponent implements OnInit {
     const setOfCheckedId = this.bankCard.setOfCheckedId;
     const checkedBankCard = bankCardData.filter(item => setOfCheckedId.has(item.id)).map(item => {
       return {
+        bank_card_id: item.id,
         account_name: item.account_name,
         bank_name: item.bank_name,
         card_no: item.card_no,
         bank_address: item.bank_address,
       }
     });
+    this.orderData = [];
     this.orderData = [...this.orderData, ...checkedBankCard];
     this.bankCardVisible = false;
   }

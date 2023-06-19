@@ -66,13 +66,9 @@ export class DefaultInterceptor implements HttpInterceptor {
             reReq = req.clone({ url, headers: httpHeaders });
         }
 
-        console.log(reReq.method);
-        console.log(reReq.body);
-        console.log(reReq);
 
         return next.handle(reReq).pipe(
             mergeMap((event: any) => {
-                console.log(event);
                 // 允许统一对请求错误处理
                 if (event instanceof HttpResponseBase) {
                     if (event.status === 200) {
@@ -88,14 +84,10 @@ export class DefaultInterceptor implements HttpInterceptor {
                             }
                         }
                     }
-                    // const handleData = this.handleData(event);
-                    // return handleData;
                 }
-                // 若一切都正常，则后续操作
                 return of(event);
             }),
             catchError((error: HttpErrorResponse) => {
-                console.log(error);
                 if (error.error.code) {
                     this.message.error(error.error.message);
                 } else {

@@ -14,10 +14,10 @@ export class AddSubAccountComponent implements OnInit {
   form = this.fb.group({
     username: [null, [Validators.required]],
     password: [null, [Validators.required]],
-    role: [this.permissionData],
-    merchant_id: ['0', [Validators.required]],
-  })
+    role: [null, [Validators.required]],
+    merchant_id: [null],
+  });
   ngOnInit(): void {
-    this.form.get('role')?.setValue(this.permissionData);
+    // this.form.get('role')?.setValue(this.permissionData);
   }
 }

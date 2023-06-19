@@ -115,14 +115,30 @@ export class LayoutDefaultSidebarComponent implements OnInit {
           url: '/merchant/order'
         }
       ]
-    },
+    }, {
+      level: 1,
+      title: '充值订单',
+      icon: 'bars',
+      open: false,
+      selected: false,
+      disabled: false,
+      children:[
+        {
+          level: 2,
+          title: '充值订单列表',
+          selected: false,
+          disabled: false,
+          url: '/recharge-order/list'
+        }
+      ]
+    }
   ];
   private destroy$ = new Subject<void>();
   constructor(
     private layout: LayoutService,
     private injector: Injector,
   ) {
-   
+
   }
   ngOnInit() {
     try {
@@ -136,7 +152,7 @@ export class LayoutDefaultSidebarComponent implements OnInit {
         )
         .subscribe(() => {
           const breadcrumbs = this.getBreadcrumbs(activatedRoute.root);
-          if(breadcrumbs[breadcrumbs.length - 1]){
+          if (breadcrumbs[breadcrumbs.length - 1]) {
             const activatedUrl = breadcrumbs[breadcrumbs.length - 1].url;
             this.sidebarData.forEach(item => {
               if (item.children) {

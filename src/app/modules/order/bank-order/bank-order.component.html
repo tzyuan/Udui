@@ -3,8 +3,8 @@
     <input *nzSpaceItem nz-input [(ngModel)]="min" placeholder="0">
     <div *nzSpaceItem>-</div>
     <input *nzSpaceItem nz-input [(ngModel)]="max" placeholder="999999">
-    <button *nzSpaceItem nz-button nzType="primary">立即查询</button>
-    <button *nzSpaceItem nz-button nzType="primary" (click)="createOrder()"><span nz-icon nzType="user-add"
+    <button *nzSpaceItem nz-button nzType="primary" (click)="getList()" [nzLoading]="loading">立即查询</button>
+    <button *nzSpaceItem nz-button nzType="primary" (click)="createOrder()"><span nz-icon nzType="unordered-list"
             nzTheme="outline"></span>创建新订单</button>
 </nz-space>
 <nz-divider></nz-divider>
@@ -15,11 +15,11 @@
     <nz-tab nzTitle="已完成"></nz-tab>
     <nz-tab nzTitle="已取消"></nz-tab>
 </nz-tabset>
-<nz-table #nzTable [nzData]="orderData" nzSize="small" [nzPageSize]="20">
+<nz-table #nzTable [nzData]="orderData" nzSize="small" nzFrontPagination="false" [nzLoading]="loading">
     <thead>
         <tr>
             <th>订单号</th>
-            <th>银行</th>
+            <!-- <th>银行</th> -->
             <th>金额</th>
             <th>标签</th>
             <th>备注</th>
@@ -31,7 +31,7 @@
     <tbody>
         <tr *ngFor="let i of nzTable.data">
             <td>{{i.order_no}}</td>
-            <td>{{i.bank_card_id}}</td>
+            <!-- <td>{{i.bank_card_id}}</td> -->
             <td>{{i.amount | currency:''}}</td>
             <td>
                 <ng-container [ngSwitch]="i.only_private">
@@ -56,9 +56,49 @@
             </td>
             <td>{{i.create_time}}</td>
             <td>
-                <a href="#">查看详情</a>
+                <a [nzDisabled]="detailLoading" nz-typography (click)="showDetail(orderDetail,i)">查看详情</a>
             </td>
+
 
         </tr>
     </tbody>
 </nz-table>
+
+<ng-template #orderDetail let-params>
+    <nz-skeleton [nzActive]="true" [nzLoading]="detailLoading">
+        <nz-descriptions nzTitle="订单信息">
+            <nz-descriptions-item nzTitle="订单号">{{params.orderInfo.order_no}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="充值金额">{{params.orderInfo.amount | currency:''}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="汇率">{{params.orderInfo.exchange_rate | currency:''}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="标签">
+                <ng-container [ngSwitch]="params.orderInfo.only_private">
+                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
+                </ng-container>
+                <ng-container [ngSwitch]="params.orderInfo.only_single">
+                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
+                </ng-container>
+                <ng-container [ngSwitch]="params.orderInfo.need_receipt">
+                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
+                </ng-container>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="状态">
+                <ng-container [ngSwitch]="params.orderInfo.status">
+                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="warning">待接单</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="error">待支付</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="processing">待审核</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="3"><nz-tag nzColor="success">已完成</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="4"><nz-tag nzColor="default">已取消</nz-tag></ng-container>
+                </ng-container>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="操作人">{{params.userInfo.username}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="备注" [nzSpan]="3">{{params.orderInfo.memo}}</nz-descriptions-item>
+        </nz-descriptions>
+        <nz-descriptions nzTitle="银行卡信息">
+            <nz-descriptions-item nzTitle="开户名称">{{params.cardInfo.account_name}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="银行名称">{{params.cardInfo.bank_name}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="银行卡号">{{params.cardInfo.card_no}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="开户地址">{{params.cardInfo.bank_address}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="备注" [nzSpan]="3">{{params.cardInfo.memo}}</nz-descriptions-item>
+        </nz-descriptions>
+    </nz-skeleton>
+</ng-template>
