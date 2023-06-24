@@ -10,8 +10,8 @@ export class RechargeOrderListComponent implements OnInit {
     constructor(
         private http: HttpClient
     ) { }
-        
-    orderData = [];
+
+    orderData: any[] = [];
     loading = false;
     getData = () => {
         this.http.get<any>(`/admin/recharge-orders?status=1`).subscribe({

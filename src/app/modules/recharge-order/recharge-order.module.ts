@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { RechargeOrderRoutingModule } from './recharge-order-routing.module';
 import { RechargeOrderListComponent } from './recharge-order-list/recharge-order-list.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { RechargeOrderListComponent } from './recharge-order-list/recharge-order
   ],
   imports: [
     CommonModule,
-    RechargeOrderRoutingModule
+    RechargeOrderRoutingModule,
+    SharedModule
   ]
 })
 export class RechargeOrderModule { }
