@@ -92,6 +92,7 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 // 其他
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
@@ -159,7 +160,8 @@ const THIRDMODULES = [
   NzSkeletonModule,
   NzSpinModule,
   NzAnchorModule,
-  NzBackTopModule
+  NzBackTopModule,
+  NzImageModule
 ];
 // #注册第三方组件 结束
 

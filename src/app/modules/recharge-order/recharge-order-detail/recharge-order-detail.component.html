@@ -1,0 +1,51 @@
+<nz-skeleton [nzActive]="true" [nzLoading]="loading">
+
+    <nz-descriptions nzTitle="银行卡订单">
+        <nz-descriptions-item nzTitle="订单编号">{{orderDetailData.order_no}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="银行名称">{{orderDetailData.bank_name}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="开户人">{{orderDetailData.account_name}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="银行卡号">{{orderDetailData.card_no}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="金额">{{orderDetailData.amount}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="创建时间">{{orderDetailData.create_time}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="标签">
+            <ng-container *ngIf="orderDetailData.only_private==1"><nz-tag
+                    nzColor="processing">仅限私卡</nz-tag></ng-container>
+            <ng-container *ngIf="orderDetailData.only_single==1"><nz-tag
+                    nzColor="processing">不可拆单</nz-tag></ng-container>
+            <ng-container *ngIf="orderDetailData.need_receipt==1"><nz-tag
+                    nzColor="processing">需要电子回单</nz-tag></ng-container>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="备注">{{orderDetailData.memo}}
+        </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions nzTitle="充值订单">
+        <nz-descriptions-item nzTitle="订单编号">{{orderDetailData.pay_order_no}}</nz-descriptions-item>
+        <ng-container *ngIf="orderDetailData.status">
+            <nz-descriptions-item nzTitle="状态">
+                <nz-tag
+                    [nzColor]="statusMap[orderDetailData.status].type">{{statusMap[orderDetailData.status].title}}</nz-tag>
+            </nz-descriptions-item>
+        </ng-container>
+        <ng-container *ngIf="orderDetailData.status==3">
+            <nz-descriptions-item nzTitle="驳回原因">{{orderDetailData.user_id}}</nz-descriptions-item>
+        </ng-container>
+        <nz-descriptions-item nzTitle="充值用户">{{orderDetailData.user_id}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="充值凭证">
+            <img nz-image width="100px" height="100px" [nzSrc]="orderDetailData.voucher" alt="" />
+        </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-space *ngIf="orderDetailData.status==1">
+        <button *nzSpaceItem nz-button nzType="primary" (click)="checkInOrder()">审核通过</button>
+        <button *nzSpaceItem nz-button nzDanger nzType="primary"
+            (click)="checkOutOrder(checkOutOrderModalContent)">驳回</button>
+    </nz-space>
+</nz-skeleton>
+
+
+
+<ng-template #checkOutOrderModalContent>
+    <input nz-input [(ngModel)]="memo" placeholder="驳回原因">
+</ng-template>

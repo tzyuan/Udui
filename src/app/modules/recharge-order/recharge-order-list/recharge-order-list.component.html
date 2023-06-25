@@ -1,17 +1,37 @@
-<nz-table #nzTable [nzData]="orderData" nzFrontPagination="false">
+<nz-tabset [(nzSelectedIndex)]="activeTab" (nzSelectedIndexChange)="getData()">
+  <ng-container *ngFor="let status of statusData">
+    <nz-tab [nzTitle]="status.title"></nz-tab>
+  </ng-container>
+
+</nz-tabset>
+<nz-table #nzTable [nzData]="orderData" nzFrontPagination="false" [nzLoading]="loading">
   <thead>
     <tr>
       <th>银行卡订单</th>
-      <th>充值凭证</th>
+      <th>金额</th>
+      <th>状态</th>
+      <!-- <th>充值凭证</th> -->
       <th>操作</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let i of nzTable.data">
-      <td>{{i.bankname}}</td>
-      
       <td>
-        <a>查看详情</a>
+        <b nz-typography>{{i.order_no}}</b><br>
+        <span nz-typography nzType="secondary">{{i.card_no}}</span><br>
+        <span nz-typography nzType="secondary">{{i.bank_name}}</span>
+      </td>
+      <td>
+        {{i.amount | currency:''}}
+      </td>
+      <td>
+        <nz-tag [nzColor]="statusMap[i.status].type">{{statusMap[i.status].title}}</nz-tag>
+      </td>
+      <!-- <td>
+        <img nz-image width="50px" height="50px" [src]="i.voucher" />
+      </td> -->
+      <td>
+        <a (click)="showDetail(i)">查看详情</a>
         <!-- <a href="#" (click)="edit(i)">Edit</a>
         <nz-divider nzType="vertical"></nz-divider>
         <a href="#" (click)="del(i)">Remove</a>
@@ -26,7 +46,7 @@
             </li>
           </ul>
         </nz-dropdown> -->
-        
+
       </td>
     </tr>
   </tbody>

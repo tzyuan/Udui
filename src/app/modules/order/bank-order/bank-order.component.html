@@ -34,15 +34,9 @@
             <!-- <td>{{i.bank_card_id}}</td> -->
             <td>{{i.amount | currency:''}}</td>
             <td>
-                <ng-container [ngSwitch]="i.only_private">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
-                </ng-container>
-                <ng-container [ngSwitch]="i.only_single">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
-                </ng-container>
-                <ng-container [ngSwitch]="i.need_receipt">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
-                </ng-container>
+                <ng-container *ngIf="i.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
+                <ng-container *ngIf="i.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
+                <ng-container *ngIf="i.need_receipt==1"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
             </td>
             <td>{{i.memo}}</td>
             <td>
