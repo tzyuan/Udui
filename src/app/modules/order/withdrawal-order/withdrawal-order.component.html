@@ -1,1 +1,27 @@
-<p>withdrawal-order works!</p>
+<nz-table #nzTable [nzData]="showOrderData" nzFrontPagination="false" [nzLoading]="loading">
+    <thead>
+        <tr>
+            <th>提现用户</th>
+            <th>提现金额</th>
+            <th>申请时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let i of nzTable.data">
+            <td>
+                <span nz-typography>{{i.user_name}}</span><br>
+                <span nz-typography [nzCopyText]="i.trc_url">{{i.trc_url}}</span><br>
+            </td>
+            <td>{{i.change_amount}}</td>
+            <td>{{i.create_time}}</td>
+            <td>
+                <a (click)="deal(i,dealOrderModalContent)">确认转账</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #dealOrderModalContent>
+    <input nz-input [(ngModel)]="one_code" placeholder="驳回原因">
+</ng-template>
