@@ -8,11 +8,16 @@
       nzType="credit-card" nzTheme="outline"></span>创建银行卡</button>
 </nz-space>
 <nz-divider></nz-divider>
-<nz-table #bankCards [nzData]="bankCardData" nzFrontPagination="false" [nzLoading]="loading">
+<nz-tabset *ngIf="merchant_id=='0'" [(nzSelectedIndex)]="activeTab" (nzSelectedIndexChange)="filterData()">
+  <ng-container *ngFor="let status of tabs">
+    <nz-tab [nzTitle]="status.title"></nz-tab>
+  </ng-container>
+</nz-tabset>
+<nz-table #bankCards [nzData]="showBankCardData" nzFrontPagination="false" [nzLoading]="loading">
   <thead>
     <tr>
       <th>银行卡信息</th>
-      <th>状态</th>
+      <th *ngIf="activeTab!=0">商户名称</th>
       <th>创建时间</th>
       <th>状态</th>
       <th>备注</th>
@@ -29,11 +34,11 @@
         <br>
         <span nz-typography nzType="secondary">{{i.bank_address}}</span>
       </td>
-      <td>{{i.status}}</td>
+      <td *ngIf="activeTab!=0">{{i.merchant_id}}</td>
       <td>{{i.create_time}}</td>
       <td>
-        <nz-tag *ngIf="i.status===0" nzColor="magenta">关闭</nz-tag>
-        <nz-tag *ngIf="i.status===1" nzColor="success">开启</nz-tag>
+        <nz-tag *ngIf="i.status==0" nzColor="magenta">关闭</nz-tag>
+        <nz-tag *ngIf="i.status==1" nzColor="success">开启</nz-tag>
       </td>
       <td>{{i.memo}}</td>
       <td>

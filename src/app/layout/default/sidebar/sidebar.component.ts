@@ -91,31 +91,33 @@ export class LayoutDefaultSidebarComponent implements OnInit {
           url: '/order/withdrawal-order'
         }
       ]
-    }, {
-      level: 1,
-      title: '商户管理',
-      icon: 'bars',
-      open: false,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: '商户账号',
-          open: false,
-          selected: false,
-          disabled: false,
-          url: '/merchant/account'
-        },
-        {
-          level: 2,
-          title: '商户订单',
-          selected: false,
-          disabled: false,
-          url: '/merchant/order'
-        }
-      ]
-    }, {
+    }, 
+    // {
+    //   level: 1,
+    //   title: '商户管理',
+    //   icon: 'bars',
+    //   open: false,
+    //   selected: false,
+    //   disabled: false,
+    //   children: [
+    //     {
+    //       level: 2,
+    //       title: '商户账号',
+    //       open: false,
+    //       selected: false,
+    //       disabled: false,
+    //       url: '/merchant/account'
+    //     },
+    //     {
+    //       level: 2,
+    //       title: '商户订单',
+    //       selected: false,
+    //       disabled: false,
+    //       url: '/merchant/order'
+    //     }
+    //   ]
+    // },
+     {
       level: 1,
       title: '充值订单',
       icon: 'bars',

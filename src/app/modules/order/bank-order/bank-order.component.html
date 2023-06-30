@@ -5,22 +5,29 @@
     <input *nzSpaceItem nz-input [(ngModel)]="max" placeholder="999999">
     <button *nzSpaceItem nz-button nzType="primary" (click)="getList()" [nzLoading]="loading">立即查询</button>
     <button *nzSpaceItem nz-button nzType="primary" (click)="createOrder()"><span nz-icon nzType="unordered-list"
-            nzTheme="outline"></span>创建新订单</button>
+              nzTheme="outline"></span>创建新订单</button>
 </nz-space>
 <nz-divider></nz-divider>
-<nz-tabset>
-    <nz-tab nzTitle="待接单"></nz-tab>
-    <nz-tab nzTitle="待支付"></nz-tab>
-    <nz-tab nzTitle="已支付"></nz-tab>
-    <nz-tab nzTitle="已完成"></nz-tab>
-    <nz-tab nzTitle="已取消"></nz-tab>
+<ng-container *ngIf="merchant_id=='0'">
+    <nz-radio-group [(ngModel)]="isMerchant" nzButtonStyle="solid" (ngModelChange)="changeMerchant()">>
+        <label nz-radio-button [nzValue]="false">自营订单</label>
+        <label nz-radio-button [nzValue]="true">商户订单</label>
+    </nz-radio-group>
+    <nz-divider></nz-divider>
+</ng-container>
+<nz-tabset *ngIf="!isMerchant" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
+    <nz-tab *ngFor="let item of tabs" [nzTitle]="item.title"></nz-tab>
 </nz-tabset>
-<nz-table #nzTable [nzData]="orderData" nzSize="small" nzFrontPagination="false" [nzLoading]="loading">
+<nz-tabset *ngIf="isMerchant" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
+    <nz-tab *ngFor="let item of tabs2" [nzTitle]="item.title"></nz-tab>
+</nz-tabset>
+<nz-table #nzTable [nzData]="showOrderData" nzSize="small" nzFrontPagination="false" [nzLoading]="loading">
     <thead>
         <tr>
             <th>订单号</th>
             <!-- <th>银行</th> -->
             <th>金额</th>
+            <th *ngIf="isMerchant">商户</th>
             <th>标签</th>
             <th>备注</th>
             <th>状态</th>
@@ -33,6 +40,7 @@
             <td>{{i.order_no}}</td>
             <!-- <td>{{i.bank_card_id}}</td> -->
             <td>{{i.amount | currency:''}}</td>
+            <td *ngIf="isMerchant">{{i.merchant_id}}</td>
             <td>
                 <ng-container *ngIf="i.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
                 <ng-container *ngIf="i.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
@@ -41,9 +49,9 @@
             <td>{{i.memo}}</td>
             <td>
                 <ng-container [ngSwitch]="i.status">
-                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="warning">待接单</nz-tag></ng-container>
-                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="error">待支付</nz-tag></ng-container>
-                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="processing">待审核</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="error">待审核</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="error">待接单</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="processing">待支付</nz-tag></ng-container>
                     <ng-container *ngSwitchCase="3"><nz-tag nzColor="success">已完成</nz-tag></ng-container>
                     <ng-container *ngSwitchCase="4"><nz-tag nzColor="default">已取消</nz-tag></ng-container>
                 </ng-container>
@@ -77,9 +85,9 @@
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="状态">
                 <ng-container [ngSwitch]="params.orderInfo.status">
-                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="warning">待接单</nz-tag></ng-container>
-                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="error">待支付</nz-tag></ng-container>
-                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="processing">待审核</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="error">待审核</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="error">待接单</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="processing">待支付</nz-tag></ng-container>
                     <ng-container *ngSwitchCase="3"><nz-tag nzColor="success">已完成</nz-tag></ng-container>
                     <ng-container *ngSwitchCase="4"><nz-tag nzColor="default">已取消</nz-tag></ng-container>
                 </ng-container>

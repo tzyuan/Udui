@@ -6,25 +6,47 @@ import { HttpClient } from '@angular/common/http';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { forkJoin } from 'rxjs';
+import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 @Component({
   selector: 'app-bank-order',
   templateUrl: './bank-order.component.html',
   styleUrls: ['./bank-order.component.scss']
 })
 export class BankOrderComponent implements OnInit {
-
-  orderData: any = [];
-  loading = false;
-  detailLoading = false;
-  min = '';
-  max = '';
-  msgId = '';
   constructor(
     private drawer: NzDrawerService,
     private http: HttpClient,
     private modal: NzModalService,
     private message: NzMessageService,
+    private cookies: CookiesService,
+
   ) { }
+
+
+  orderData: any[] = [];
+  showOrderData: any[] = [];
+  loading = false;
+  detailLoading = false;
+  tabIndex = 0;
+  min = '';
+  max = '';
+  msgId = '';
+  tabs = [
+    { title: '待接单', value: 1 },
+    { title: '待支付', value: 2 },
+    { title: '已完成', value: 3 },
+    { title: '已取消', value: 4 },
+  ];
+  tabs2 = [
+    { title: '待审核', value: 0 },
+    { title: '待接单', value: 1 },
+    { title: '待支付', value: 2 },
+    { title: '已完成', value: 3 },
+    { title: '已取消', value: 4 },
+  ]
+  isMerchant = false;
+  merchant_id = this.cookies.getCookie('merchant_id');
+
   createOrder = () => {
     const createDrawer = this.drawer.create({
       nzTitle: '创建银行卡订单',
@@ -40,18 +62,30 @@ export class BankOrderComponent implements OnInit {
       }
     })
   }
-
   getList = () => {
     this.loading = true;
-    this.http.get('/admin/bank-card-orders').subscribe({
+    const status = this.isMerchant ? this.tabs2[this.tabIndex].value : this.tabs[this.tabIndex].value;
+    this.http.get<any>('/admin/bank-card-orders?status=' + status).subscribe({
       next: (res) => {
         this.loading = false;
         this.orderData = res;
+        this.filterList();
       },
       error: (err) => {
         this.loading = false;
       },
     })
+  }
+  filterList = () => {
+    if (this.isMerchant) {
+      this.showOrderData = this.orderData.filter(item => item.merchant_id != 0)
+    } else {
+      this.showOrderData = this.orderData.filter(item => item.merchant_id == 0)
+    }
+  }
+  changeMerchant = () => {
+    this.tabIndex = 0;
+    this.getList();
   }
   showDetail = (tplContent: TemplateRef<{}>, order: any) => {
     this.detailLoading = true;
@@ -79,19 +113,7 @@ export class BankOrderComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.isMerchant = this.merchant_id != '0';
     this.getList();
-    // for (let i = 0; i < 35; i++) {
-    //   this.orderData = [...this.orderData, {
-    //     order_no: (Math.random() * 100000000000000000).toFixed(0),
-    //     bank_card_id: '建设银行',
-    //     amount: parseInt((Math.random() * 20000).toFixed(0)),
-    //     only_private: Math.random() > 0.5,
-    //     only_single: Math.random() > 0.5,
-    //     need_receipt: Math.random() > 0.5,
-    //     memo: '备注xxxxxxxx',
-    //     status: parseInt((Math.random() * 4).toFixed(0)),
-    //     create_time: moment().format('YYYY-MM-DD HH:mm:ss')
-    //   }]
-    // }
   }
 }

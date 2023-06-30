@@ -9,7 +9,8 @@
     <thead>
         <tr>
             <th>子账号用户名</th>
-            <th>子账号权限</th>
+            <th>所属商户</th>
+            <th>账号类型</th>
             <th>最近登录时间</th>
             <th>操作</th>
         </tr>
@@ -17,7 +18,18 @@
     <tbody>
         <tr *ngFor="let i of nzTable.data">
             <td>{{i.username}}</td>
-            <td>{{i.role}}</td>
+            <td>{{i.merchant_id}}</td>
+            <td>
+                <ng-container *ngIf="i.role==1">
+                    <nz-tag nzColor="processing">网站管理员</nz-tag>
+                </ng-container>
+                <ng-container *ngIf="i.role==2">
+                    <nz-tag nzColor="success">商户</nz-tag>
+                </ng-container>
+                <ng-container *ngIf="i.role==3">
+                    <nz-tag nzColor="default">子账号</nz-tag>
+                </ng-container>
+            </td>
             <td>{{i.last_login_time}}</td>
             <td>
                 <a href="#">编辑</a>
@@ -36,7 +48,7 @@
     </p>
     <div style="text-align: center;">
         <p>
-            <img nz-image width="200px" height="200px" [src]="params.src" />
+            <img nz-image width="200px" height="200px" [nzSrc]="params.src" />
         </p>
         <p>
             <code>{{params.code}}</code>

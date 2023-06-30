@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 interface BankCard {
   id: number;
   account_name: string;
@@ -7,6 +8,7 @@ interface BankCard {
   card_no: string;
   bank_address: string;
   status: number;
+  merchant_id: string;
 }
 @Component({
   selector: 'app-bank-order-batch-bank-card',
@@ -20,8 +22,10 @@ export class BankOrderBatchBankCardComponent implements OnInit {
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<number>();
+  merchant_id = this.cookies.getCookie('merchant_id');
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cookies: CookiesService,
   ) { }
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
@@ -52,7 +56,10 @@ export class BankOrderBatchBankCardComponent implements OnInit {
     this.http.get<BankCard[]>('/admin/bank-cards').subscribe({
       next: (res: BankCard[]) => {
         this.loading = false;
-        this.bankCardData = res.filter(item => item.status === 1)
+        if (this.merchant_id == '0') {
+
+        }
+        this.bankCardData = res.filter(item => item.status == 1 && item.merchant_id == this.merchant_id)
       },
       error: (err) => {
         this.loading = false;

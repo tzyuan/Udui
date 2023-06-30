@@ -3,6 +3,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 
 
 @Component({
@@ -16,9 +17,12 @@ export class BankCardComponent implements OnInit {
     private fb: FormBuilder,
     private modal: NzModalService,
     private message: NzMessageService,
+    private cookies: CookiesService,
+
   ) { }
   loading = false;
   bankCardData: any[] = [];
+  showBankCardData: any[] = [];
   addForm = this.fb.group({
     account_name: [null, [Validators.required]],
     bank_name: [null, [Validators.required]],
@@ -26,18 +30,30 @@ export class BankCardComponent implements OnInit {
     bank_address: [null, [Validators.required]],
     memo: [null],
   });
+  merchant_id = this.cookies.getCookie('merchant_id');
+  activeTab = 0;
+  tabs = [
+    { title: '自营银行卡', value: true },
+    { title: '商户银行卡', value: false },
+  ];
+
   getList = () => {
     this.loading = true;
     this.http.get<any>('/admin/bank-cards').subscribe({
       next: (res) => {
         this.loading = false;
         this.bankCardData = res;
+        this.filterData();
       },
       error: (err) => {
         this.loading = false;
 
       }
     })
+  }
+  filterData = () => {
+    const tab = this.tabs[this.activeTab].value;
+    this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 0) === tab);
   }
   // 创建银行卡
   createBankCard = (tplContent: TemplateRef<{}>) => {
@@ -109,6 +125,7 @@ export class BankCardComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    this.activeTab = this.merchant_id == '0' ? 0 : 1;
     this.getList();
   }
 }

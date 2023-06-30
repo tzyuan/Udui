@@ -48,7 +48,7 @@ export class SubAccountComponent implements OnInit {
               username: data.form.value.username,
               password: data.form.value.password,
               role: data.form.value.role,
-              merchant_id: 0,
+              merchant_id: data.form.value.merchant_id,
             }).subscribe({
               next: (res) => {
                 this.modal.create({
