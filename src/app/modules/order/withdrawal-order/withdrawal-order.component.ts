@@ -27,24 +27,25 @@ export class WithdrawalOrderComponent implements OnInit {
     this.http.get<any>('/admin/cash-orders').subscribe({
       next: (res) => {
         this.loading = false;
-        this.orderData = res
+        this.orderData = res;
+        this.showOrderData = this.orderData;
       }
     })
   }
   deal = (order: any, telContent: TemplateRef<{}>) => {
     this.one_code = '';
     this.modal.create({
-      nzTitle: '请输入驳回原因',
+      nzTitle: '请输入谷歌验证码',
       nzContent: telContent,
-      nzOkDanger: true,
-      nzOkText: '驳回',
+      nzOkText: '确定',
       nzOnOk: () => {
         if (this.one_code.trim() == '') {
           this.message.warning('请输入谷歌验证码')
           return false;
         }
         return new Promise((resolve, reject) => {
-          this.http.post('/admin/recharge-order/check', {
+          this.http.post('/admin/cash-order/deal', {
+            status: 1,
             cash_order_no: order.cash_order_no,
             one_code: this.one_code
           }).subscribe({
@@ -58,12 +59,6 @@ export class WithdrawalOrderComponent implements OnInit {
           })
         })
       }
-    });
-
-    this.loading = true;
-    this.http.post(`/cash-order/deal`, {
-      cash_order_no: '',
-      one_code: ''
     });
   }
 

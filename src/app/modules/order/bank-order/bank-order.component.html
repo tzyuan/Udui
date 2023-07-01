@@ -5,7 +5,7 @@
     <input *nzSpaceItem nz-input [(ngModel)]="max" placeholder="999999">
     <button *nzSpaceItem nz-button nzType="primary" (click)="getList()" [nzLoading]="loading">立即查询</button>
     <button *nzSpaceItem nz-button nzType="primary" (click)="createOrder()"><span nz-icon nzType="unordered-list"
-              nzTheme="outline"></span>创建新订单</button>
+            nzTheme="outline"></span>创建新订单</button>
 </nz-space>
 <nz-divider></nz-divider>
 <ng-container *ngIf="merchant_id=='0'">
@@ -40,7 +40,7 @@
             <td>{{i.order_no}}</td>
             <!-- <td>{{i.bank_card_id}}</td> -->
             <td>{{i.amount | currency:''}}</td>
-            <td *ngIf="isMerchant">{{i.merchant_id}}</td>
+            <td *ngIf="isMerchant">{{i.merchant_name}}</td>
             <td>
                 <ng-container *ngIf="i.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
                 <ng-container *ngIf="i.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
@@ -58,10 +58,18 @@
             </td>
             <td>{{i.create_time}}</td>
             <td>
-                <a [nzDisabled]="detailLoading" nz-typography (click)="showDetail(orderDetail,i)">查看详情</a>
+                <nz-space [nzSplit]="spaceSplit">
+                    <ng-template #spaceSplit>
+                        <nz-divider nzType="vertical"></nz-divider>
+                    </ng-template>
+                    <a *nzSpaceItem [nzDisabled]="detailLoading" nz-typography
+                        (click)="showDetail(orderDetail,i)">查看详情</a>
+                    <ng-container *ngIf="isMerchant">
+                        <a *nzSpaceItem (click)="merchantExamine(i,1)">审核</a>
+                        <a *nzSpaceItem nz-typography nzType="danger" (click)="merchantExamine(i,2)">驳回</a>
+                    </ng-container>
+                </nz-space>
             </td>
-
-
         </tr>
     </tbody>
 </nz-table>
@@ -73,15 +81,9 @@
             <nz-descriptions-item nzTitle="充值金额">{{params.orderInfo.amount | currency:''}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="汇率">{{params.orderInfo.exchange_rate | currency:''}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="标签">
-                <ng-container [ngSwitch]="params.orderInfo.only_private">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
-                </ng-container>
-                <ng-container [ngSwitch]="params.orderInfo.only_single">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
-                </ng-container>
-                <ng-container [ngSwitch]="params.orderInfo.need_receipt">
-                    <ng-container *ngSwitchCase="false"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
-                </ng-container>
+                <ng-container *ngIf="params.orderInfo.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
+                <ng-container *ngIf="params.orderInfo.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
+                <ng-container *ngIf="params.orderInfo.need_receipt==1"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="状态">
                 <ng-container [ngSwitch]="params.orderInfo.status">

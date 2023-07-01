@@ -112,6 +112,31 @@ export class BankOrderComponent implements OnInit {
 
 
   }
+  // 审核/拒绝
+  merchantExamine = (order: any, status: 1 | 2) => {
+    this.modal.confirm({
+      nzTitle: status == 1 ? '通过审核' : '驳回订单',
+      nzContent: status == 1 ? '确定将这笔订单通过审核吗?' : '确定驳回这笔订单吗?',
+      nzOkText: status == 1 ? '通过' : '驳回',
+      nzOkDanger: status == 2,
+      nzOnOk: () => {
+        return new Promise((resolve, reject) => {
+          this.http.patch(`/admin/bank-card-orders/${order.id}`, { audit_status: status }).subscribe({
+            next: () => {
+              this.message.success('审核成功');
+              this.getList();
+              resolve(true);
+            },
+            error: () => {
+              reject(false);
+
+            }
+          })
+        })
+      }
+    })
+    let modalParasm = {}
+  }
   ngOnInit(): void {
     this.isMerchant = this.merchant_id != '0';
     this.getList();

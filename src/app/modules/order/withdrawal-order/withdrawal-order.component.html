@@ -1,7 +1,7 @@
 <nz-table #nzTable [nzData]="showOrderData" nzFrontPagination="false" [nzLoading]="loading">
     <thead>
         <tr>
-            <th>提现用户</th>
+            <th>提现trc</th>
             <th>提现金额</th>
             <th>申请时间</th>
             <th>操作</th>
@@ -10,10 +10,10 @@
     <tbody>
         <tr *ngFor="let i of nzTable.data">
             <td>
-                <span nz-typography>{{i.user_name}}</span><br>
-                <span nz-typography [nzCopyText]="i.trc_url">{{i.trc_url}}</span><br>
+                <!-- <span nz-typography>{{i.user_name}}</span><br>  nz-typography nzCopyable nzCopyText="Hello, Ant Design!"-->
+                <span  nz-typography nzCopyable [nzCopyText]="i.trc_url">{{i.trc_url}}</span><br>
             </td>
-            <td>{{i.change_amount}}</td>
+            <td>{{i.amount}}</td>
             <td>{{i.create_time}}</td>
             <td>
                 <a (click)="deal(i,dealOrderModalContent)">确认转账</a>
@@ -23,5 +23,5 @@
 </nz-table>
 
 <ng-template #dealOrderModalContent>
-    <input nz-input [(ngModel)]="one_code" placeholder="驳回原因">
+    <input nz-input [(ngModel)]="one_code" placeholder="请输入谷歌验证码" />
 </ng-template>

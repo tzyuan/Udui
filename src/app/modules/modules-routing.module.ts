@@ -33,7 +33,7 @@ const routes: Routes = [
       {
         path: 'merchant',
         loadChildren: () => import('./merchant/merchant.module').then(mod => mod.MerchantModule),
-        canActivate: [ModuleActivate]
+        canActivate: [ModuleActivate], data: { breadcrumb: '商户管理' },
       },
       {
         path: 'recharge-order',
