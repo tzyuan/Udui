@@ -8,17 +8,17 @@
             nzTheme="outline"></span>创建新订单</button>
 </nz-space>
 <nz-divider></nz-divider>
-<ng-container *ngIf="merchant_id=='0'">
-    <nz-radio-group [(ngModel)]="isMerchant" nzButtonStyle="solid" (ngModelChange)="changeMerchant()">>
+<ng-container *ngIf="!isMerchant">
+    <nz-radio-group [(ngModel)]="orderType" nzButtonStyle="solid" (ngModelChange)="changeMerchant()">>
         <label nz-radio-button [nzValue]="false">自营订单</label>
         <label nz-radio-button [nzValue]="true">商户订单</label>
     </nz-radio-group>
     <nz-divider></nz-divider>
 </ng-container>
-<nz-tabset *ngIf="!isMerchant" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
+<nz-tabset *ngIf="!orderType" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
     <nz-tab *ngFor="let item of tabs" [nzTitle]="item.title"></nz-tab>
 </nz-tabset>
-<nz-tabset *ngIf="isMerchant" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
+<nz-tabset *ngIf="orderType" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getList()">
     <nz-tab *ngFor="let item of tabs2" [nzTitle]="item.title"></nz-tab>
 </nz-tabset>
 <nz-table #nzTable [nzData]="showOrderData" nzSize="small" nzFrontPagination="false" [nzLoading]="loading">
@@ -27,7 +27,7 @@
             <th>订单号</th>
             <!-- <th>银行</th> -->
             <th>金额</th>
-            <th *ngIf="isMerchant">商户</th>
+            <th *ngIf="orderType">商户</th>
             <th>标签</th>
             <th>备注</th>
             <th>状态</th>
@@ -40,7 +40,7 @@
             <td>{{i.order_no}}</td>
             <!-- <td>{{i.bank_card_id}}</td> -->
             <td>{{i.amount | currency:''}}</td>
-            <td *ngIf="isMerchant">{{i.merchant_name}}</td>
+            <td *ngIf="orderType">{{i.merchant_name}}</td>
             <td>
                 <ng-container *ngIf="i.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
                 <ng-container *ngIf="i.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>

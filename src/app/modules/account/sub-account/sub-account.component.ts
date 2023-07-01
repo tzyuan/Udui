@@ -34,21 +34,12 @@ export class SubAccountComponent implements OnInit {
           }
         });
         if (data.form.valid) {
-          // let roleData: number[] = [];
-          // if (data.form.value.role) {
-          //   roleData = data.form.value.role.filter(role => role.checked).map(role => Number(role.value));
-          // }
-          // if (roleData.length === 0) {
-          //   this.message.error('请选择权限');
-          //   return false;
-          // }
 
           return new Promise((resolve, reject) => {
             this.http.post<any>('/admin/user/add', {
               username: data.form.value.username,
               password: data.form.value.password,
-              role: data.form.value.role,
-              merchant_id: data.form.value.merchant_id,
+              role: data.form.value.role
             }).subscribe({
               next: (res) => {
                 this.modal.create({

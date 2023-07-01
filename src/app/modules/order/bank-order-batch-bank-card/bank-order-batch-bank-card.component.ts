@@ -22,7 +22,7 @@ export class BankOrderBatchBankCardComponent implements OnInit {
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<number>();
-  merchant_id = this.cookies.getCookie('merchant_id');
+  role = this.cookies.getCookie('role');
   constructor(
     private http: HttpClient,
     private cookies: CookiesService,
@@ -52,14 +52,13 @@ export class BankOrderBatchBankCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    console.log(111);
     this.http.get<BankCard[]>('/admin/bank-cards').subscribe({
       next: (res: BankCard[]) => {
         this.loading = false;
-        if (this.merchant_id == '0') {
+        if (this.role == '0') {
 
         }
-        this.bankCardData = res.filter(item => item.status == 1 && item.merchant_id == this.merchant_id)
+        this.bankCardData = res.filter(item => item.status == 1 && item.merchant_id == this.role)
       },
       error: (err) => {
         this.loading = false;

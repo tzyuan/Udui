@@ -46,8 +46,7 @@ export class MerchantAccountComponent {
             this.http.post<any>('/admin/user/add', {
               username: data.form.value.username,
               password: data.form.value.password,
-              role: data.form.value.role,
-              merchant_id: 0,
+              role: data.form.value.role
             }).subscribe({
               next: (res) => {
                 this.modal.create({

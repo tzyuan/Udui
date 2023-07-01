@@ -3,7 +3,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class BankCardComponent implements OnInit {
     private fb: FormBuilder,
     private modal: NzModalService,
     private message: NzMessageService,
-    private cookies: CookiesService,
+    private common: CommonService,
 
   ) { }
   loading = false;
@@ -30,7 +30,7 @@ export class BankCardComponent implements OnInit {
     bank_address: [null, [Validators.required]],
     memo: [null],
   });
-  merchant_id = this.cookies.getCookie('merchant_id');
+  isMerchant = this.common.isMerchant();
   activeTab = 0;
   tabs = [
     { title: '自营银行卡', value: true },
@@ -125,7 +125,7 @@ export class BankCardComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.activeTab = this.merchant_id == '0' ? 0 : 1;
+    this.activeTab = !this.isMerchant ? 0 : 1;
     this.getList();
   }
 }

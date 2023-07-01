@@ -22,6 +22,10 @@ export class CommonService {
     private locationStrategy: LocationStrategy
   ) { }
 
+  isMerchant = () => {
+    return this.cookies.getCookie('role') == '3';
+  }
+
   // form 验证
   formValid = (validateForm: FormGroup) => {
     Object.keys(validateForm.controls).map((key, item) => {

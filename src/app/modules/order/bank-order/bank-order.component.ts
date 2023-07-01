@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { forkJoin } from 'rxjs';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 @Component({
   selector: 'app-bank-order',
   templateUrl: './bank-order.component.html',
@@ -19,6 +20,7 @@ export class BankOrderComponent implements OnInit {
     private modal: NzModalService,
     private message: NzMessageService,
     private cookies: CookiesService,
+    private common: CommonService,
 
   ) { }
 
@@ -44,8 +46,8 @@ export class BankOrderComponent implements OnInit {
     { title: '已完成', value: 3 },
     { title: '已取消', value: 4 },
   ]
-  isMerchant = false;
-  merchant_id = this.cookies.getCookie('merchant_id');
+  isMerchant = this.common.isMerchant();
+  orderType = this.isMerchant;
 
   createOrder = () => {
     const createDrawer = this.drawer.create({
@@ -64,7 +66,7 @@ export class BankOrderComponent implements OnInit {
   }
   getList = () => {
     this.loading = true;
-    const status = this.isMerchant ? this.tabs2[this.tabIndex].value : this.tabs[this.tabIndex].value;
+    const status = this.orderType ? this.tabs2[this.tabIndex].value : this.tabs[this.tabIndex].value;
     this.http.get<any>('/admin/bank-card-orders?status=' + status).subscribe({
       next: (res) => {
         this.loading = false;
@@ -77,7 +79,7 @@ export class BankOrderComponent implements OnInit {
     })
   }
   filterList = () => {
-    if (this.isMerchant) {
+    if (this.orderType) {
       this.showOrderData = this.orderData.filter(item => item.merchant_id != 0)
     } else {
       this.showOrderData = this.orderData.filter(item => item.merchant_id == 0)
@@ -138,7 +140,6 @@ export class BankOrderComponent implements OnInit {
     let modalParasm = {}
   }
   ngOnInit(): void {
-    this.isMerchant = this.merchant_id != '0';
     this.getList();
   }
 }

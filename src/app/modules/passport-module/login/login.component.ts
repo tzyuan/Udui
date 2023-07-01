@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
             this.cookies.setCookie('id', res.id, rememberTime);
             this.cookies.setCookie('merchant_id', res.merchant_id, rememberTime);
             this.cookies.setCookie('username', res.username, rememberTime);
+            this.cookies.setCookie('role', res.role, rememberTime);
             this.cookies.setCookie('token', res.token.token, rememberTime);
             this.message.success(`${res.username},欢迎登录!`)
             this.router.navigateByUrl('/');
