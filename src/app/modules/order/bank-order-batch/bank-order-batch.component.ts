@@ -92,6 +92,7 @@ export class BankOrderBatchComponent implements OnInit {
   checkedBankCard = () => {
     // 读取选择的银行卡
     const bankCardData: any[] = this.bankCard.bankCardData;
+    console.log(bankCardData);
     const setOfCheckedId = this.bankCard.setOfCheckedId;
     const checkedBankCard = bankCardData.filter(item => setOfCheckedId.has(item.id)).map(item => {
       return {

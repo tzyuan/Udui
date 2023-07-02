@@ -14,6 +14,13 @@ export class WithdrawalOrderComponent implements OnInit {
   showOrderData: any[] = [];
   loading = false;
   one_code = '';
+  memo = '';
+  tabIndex = 0;
+  tabs = [
+    { title: '待转账', value: 0 },
+    { title: '已转账', value: 1 },
+    { title: '已驳回', value: 2 },
+  ];
   constructor(
     private http: HttpClient,
     private modal: NzModalService,
@@ -24,7 +31,8 @@ export class WithdrawalOrderComponent implements OnInit {
 
   getData = () => {
     this.loading = true;
-    this.http.get<any>('/admin/cash-orders').subscribe({
+    const status=this.tabs[this.tabIndex].value
+    this.http.get<any>(`/admin/cash-orders`).subscribe({
       next: (res) => {
         this.loading = false;
         this.orderData = res;
@@ -32,25 +40,41 @@ export class WithdrawalOrderComponent implements OnInit {
       }
     })
   }
-  deal = (order: any, telContent: TemplateRef<{}>) => {
-    this.one_code = '';
+  deal = (order: any) => {
+    order.loading = true;
+    this.message.loading('确认中...');
+    this.http.post('/admin/cash-order/deal', {
+      status: 1,
+      cash_order_no: order.cash_order_no,
+    }).subscribe({
+      next: (res) => {
+        order.loading = false;
+        this.message.success('确认成功');
+      },
+      error: (err) => {
+        order.loading = false;
+      }
+    })
+  }
+  dealFail = (order: any, telContent: TemplateRef<{}>) => {
+    this.memo = '';
     this.modal.create({
-      nzTitle: '请输入谷歌验证码',
+      nzTitle: '请输入驳回原因',
       nzContent: telContent,
-      nzOkText: '确定',
+      nzOkText: '驳回',
       nzOnOk: () => {
-        if (this.one_code.trim() == '') {
-          this.message.warning('请输入谷歌验证码')
+        if (this.memo.trim() == '') {
+          this.message.warning('请输入驳回原因')
           return false;
         }
         return new Promise((resolve, reject) => {
           this.http.post('/admin/cash-order/deal', {
-            status: 1,
-            cash_order_no: order.cash_order_no,
-            one_code: this.one_code
+            status: 2,
+            memo: this.memo,
+            cash_order_no: order.cash_order_no
           }).subscribe({
             next: (res) => {
-              this.message.success('确认成功');
+              this.message.success('驳回成功');
               resolve(true)
             },
             error: (err) => {

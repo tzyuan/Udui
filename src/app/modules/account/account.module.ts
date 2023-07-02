@@ -7,6 +7,7 @@ import { ResetPayPasswordComponent } from './reset-pay-password/reset-pay-passwo
 import { SubAccountComponent } from './sub-account/sub-account.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AddSubAccountComponent } from './add-sub-account/add-sub-account.component';
+import { InviteCodeComponent } from './invite-code/invite-code.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { AddSubAccountComponent } from './add-sub-account/add-sub-account.compon
     ResetPasswordComponent,
     ResetPayPasswordComponent,
     SubAccountComponent,
-    AddSubAccountComponent
+    AddSubAccountComponent,
+    InviteCodeComponent,
   ],
   imports: [
     CommonModule,

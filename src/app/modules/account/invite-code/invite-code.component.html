@@ -1,0 +1,39 @@
+<button nz-button nzType="primary" (click)="createCode(createModalContent)">生成邀请码</button>
+<nz-divider></nz-divider>
+<nz-tabset  [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getData()">
+    <nz-tab *ngFor="let item of tabs" [nzTitle]="item.title"></nz-tab>
+</nz-tabset>
+<nz-table #nzTable [nzData]="data" nzFrontPagination="false" [nzLoading]="loading">
+    <thead>
+        <tr>
+            <th>邀请码</th>
+            <th>发放批次</th>
+            <!-- <th>失效日期</th> -->
+            <th>创建时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let i of nzTable.data">
+            <td>{{i.code}}</td>
+            <td>{{i.batch_sn}}</td>
+            <!-- <td>{{i.expiry_date}}</td> -->
+            <td>{{i.create_time}}</td>
+            <td>
+                <nz-tag *ngIf="i.is_used==1" nzColor="success">已使用</nz-tag>
+                <nz-tag *ngIf="i.is_used==0" nzColor="processing">未使用</nz-tag>
+            </td>
+            <td>
+                <a>Edit</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a>Remove</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #createModalContent>
+    <p>请输入需要创建的邀请码数量</p>
+    <nz-input-number [(ngModel)]="num" [nzMin]="1" [nzStep]="1" placeholder="请输入需要创建的邀请码数量"></nz-input-number>
+</ng-template>

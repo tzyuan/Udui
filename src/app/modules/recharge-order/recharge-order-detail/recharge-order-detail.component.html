@@ -1,5 +1,5 @@
-<nz-skeleton [nzActive]="true" [nzLoading]="loading">
 
+<nz-skeleton [nzActive]="true" [nzLoading]="loading">
     <nz-descriptions nzTitle="银行卡订单">
         <nz-descriptions-item nzTitle="订单编号">{{orderDetailData.order_no}}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="银行名称">{{orderDetailData.bank_name}}</nz-descriptions-item>
@@ -31,7 +31,7 @@
         <ng-container *ngIf="orderDetailData.status==3">
             <nz-descriptions-item nzTitle="驳回原因">{{orderDetailData.user_id}}</nz-descriptions-item>
         </ng-container>
-        <nz-descriptions-item nzTitle="充值用户">{{orderDetailData.user_id}}</nz-descriptions-item>
+        <!-- <nz-descriptions-item nzTitle="充值用户">{{orderDetailData.user_id}}</nz-descriptions-item> -->
         <nz-descriptions-item nzTitle="充值凭证">
             <img nz-image width="100px" height="100px" [nzSrc]="orderDetailData.voucher" alt="" />
         </nz-descriptions-item>

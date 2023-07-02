@@ -1,9 +1,13 @@
+<nz-tabset [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="getData()">
+    <nz-tab *ngFor="let item of tabs" [nzTitle]="item.title"></nz-tab>
+</nz-tabset>
 <nz-table #nzTable [nzData]="showOrderData" nzFrontPagination="false" [nzLoading]="loading">
     <thead>
         <tr>
             <th>提现trc</th>
             <th>提现金额</th>
             <th>申请时间</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -11,17 +15,33 @@
         <tr *ngFor="let i of nzTable.data">
             <td>
                 <!-- <span nz-typography>{{i.user_name}}</span><br>  nz-typography nzCopyable nzCopyText="Hello, Ant Design!"-->
-                <span  nz-typography nzCopyable [nzCopyText]="i.trc_url">{{i.trc_url}}</span><br>
+                <span nz-typography nzCopyable [nzCopyText]="i.trc_url">{{i.trc_url}}</span><br>
             </td>
             <td>{{i.amount}}</td>
             <td>{{i.create_time}}</td>
             <td>
-                <a (click)="deal(i,dealOrderModalContent)">确认转账</a>
+                <ng-container [ngSwitch]="i.status">
+                    <ng-container *ngSwitchCase="0"><nz-tag nzColor="processing">待转账</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="1"><nz-tag nzColor="success">已转账</nz-tag></ng-container>
+                    <ng-container *ngSwitchCase="2"><nz-tag nzColor="error">已驳回</nz-tag></ng-container>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngIf="i.status==0">
+                    <a nz-typography [nzDisabled]="i.loading" (click)="deal(i)">确认转账</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-typography [nzDisabled]="i.loading" nzType="danger"
+                        (click)="dealFail(i,dealFailOrderModalContent)">驳回</a>
+                </ng-container>
             </td>
         </tr>
     </tbody>
 </nz-table>
 
-<ng-template #dealOrderModalContent>
+<!-- <ng-template #dealOrderModalContent>
     <input nz-input [(ngModel)]="one_code" placeholder="请输入谷歌验证码" />
+</ng-template> -->
+
+<ng-template #dealFailOrderModalContent>
+    <input nz-input [(ngModel)]="memo" placeholder="请输入驳回原因" />
 </ng-template>

@@ -79,14 +79,18 @@ export class RechargeOrderDetailComponent implements OnInit {
         })
       }
     });
-
   }
-  ngOnInit(): void {
+
+  getList = () => {
+    this.loading = true;
     this.http.get<any>(`/admin/recharge-orders/${this.id}`).subscribe({
       next: (res) => {
         this.orderDetailData = res[0];
         this.loading = false;
       }
     })
+  }
+  ngOnInit(): void {
+    this.getList();
   }
 }

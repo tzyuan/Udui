@@ -1,8 +1,10 @@
-<nz-table #bankCards [nzShowPagination]="false" [nzFrontPagination]="false" nzSize="small" [nzData]="bankCardData" [nzLoading]="loading">
+<nz-table #bankCards [nzShowPagination]="false" [nzFrontPagination]="false" nzSize="small" [nzData]="bankCardData"
+    [nzLoading]="loading">
     <thead>
         <tr>
-            <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
-                (nzCheckedChange)="onAllChecked($event)"></th>
+            <!-- <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onAllChecked($event)"></th> -->
+            <th>选择</th>
             <th>开户姓名</th>
             <th>银行名称</th>
             <th>银行卡号</th>

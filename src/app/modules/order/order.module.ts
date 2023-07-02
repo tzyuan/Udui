@@ -9,6 +9,7 @@ import { BankOrderEditComponent } from './bank-order-edit/bank-order-edit.compon
 import { SharedModule } from 'src/app/shared/shared.module';
 import { BankOrderBatchComponent } from './bank-order-batch/bank-order-batch.component';
 import { BankOrderBatchBankCardComponent } from './bank-order-batch-bank-card/bank-order-batch-bank-card.component';
+import { FundTypeSettingComponent } from './fund-type-setting/fund-type-setting.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { BankOrderBatchBankCardComponent } from './bank-order-batch-bank-card/ba
     BankOrderEditComponent,
     BankOrderBatchComponent,
     BankOrderBatchBankCardComponent,
+    FundTypeSettingComponent
   ],
   imports: [
     CommonModule,

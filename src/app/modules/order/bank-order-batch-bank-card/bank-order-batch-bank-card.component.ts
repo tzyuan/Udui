@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { NzDrawerRef } from 'ng-zorro-antd/drawer';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 interface BankCard {
   id: number;
@@ -22,10 +24,11 @@ export class BankOrderBatchBankCardComponent implements OnInit {
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<number>();
-  role = this.cookies.getCookie('role');
+  isMerchant = this.common.isMerchant();
   constructor(
     private http: HttpClient,
-    private cookies: CookiesService,
+    private common: CommonService,
+    private drawerRef: NzDrawerRef<string>
   ) { }
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
@@ -40,8 +43,11 @@ export class BankOrderBatchBankCardComponent implements OnInit {
     this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
   }
   onItemChecked(id: number, checked: boolean): void {
+    this.setOfCheckedId.clear()
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
+   
+
   }
   onAllChecked(checked: boolean): void {
     this.bankCardData
@@ -49,30 +55,23 @@ export class BankOrderBatchBankCardComponent implements OnInit {
     console.log(this.setOfCheckedId)
     this.refreshCheckedStatus();
   }
+  select = (data: any) => {
+    this.drawerRef.close({
+      data
+    })
+  }
 
   ngOnInit(): void {
     this.loading = true;
-    this.http.get<BankCard[]>('/admin/bank-cards').subscribe({
+    this.http.get<BankCard[]>('/admin/bank-card/retrieve').subscribe({
       next: (res: BankCard[]) => {
         this.loading = false;
-        if (this.role == '0') {
-
-        }
-        this.bankCardData = res.filter(item => item.status == 1 && item.merchant_id == this.role)
+        this.bankCardData = res;
       },
       error: (err) => {
         this.loading = false;
 
       }
     })
-    // for (let i = 0; i < 33; i++) {
-    //   this.bankCardData = [...this.bankCardData, {
-    //     id: parseInt((Math.random() * 100000).toFixed(0)),
-    //     bank_name: ['建设银行', '中国银行', '工商银行', '农业银行'][parseInt((Math.random() * 4).toFixed())],
-    //     bank_address: `上海市黄浦区xxxx街xxxx号`,
-    //     card_no: (Math.random() * 100000000).toFixed(0),
-    //     account_name: `!@#$%@#!$`
-    //   }]
-    // }
   }
 }

@@ -1,0 +1,45 @@
+<button nz-button nzType="primary" (click)="add(addModalContent)">新增类型</button>
+<nz-divider></nz-divider>
+<nz-table #nzTable [nzData]="data" nzFrontPagination="false" [nzLoading]="loading">
+    <thead>
+        <tr>
+            <th>资金类型</th>
+            <th>汇率</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let i of nzTable.data">
+            <td>
+                <span nz-typography nzEditable [(nzContent)]="i.attr1"
+                    (nzContentChange)="edit($event,'attr1',i)"></span>
+            </td>
+            <td>
+                <span nz-typography nzEditable [(nzContent)]="i.attr2"
+                    (nzContentChange)="edit($event,'attr2',i)"></span>
+            </td>
+            <td>{{i.create_time}}</td>
+            <td>
+                <a nz-typography nzType="danger" (click)="del(i)">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #addModalContent>
+    <div nz-form nzLayout="horizontal">
+        <nz-form-item nzFlex>
+            <nz-form-label nzRequired>名称</nz-form-label>
+            <nz-form-control>
+                <input nz-input [(ngModel)]="newData.name" placeholder="不能为空">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
+            <nz-form-label nzRequired>汇率</nz-form-label>
+            <nz-form-control>
+                <input nz-input [(ngModel)]="newData.rate" placeholder="最多支持四位小数">
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</ng-template>

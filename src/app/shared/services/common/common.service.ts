@@ -23,7 +23,28 @@ export class CommonService {
   ) { }
 
   isMerchant = () => {
-    return this.cookies.getCookie('role') == '3';
+    return this.cookies.getCookie('role') == '2';
+  }
+
+  /**
+   * 判断小数位数
+   * @param number 
+   * @returns 
+   */
+  countDecimalPlaces = (number: string) => {
+    // 将数值转换为字符串
+    const numberString = number;
+
+    // 使用正则表达式匹配小数部分
+    const decimalPart = numberString.match(/\.\d+/);
+
+    if (decimalPart) {
+      // 返回小数部分的长度减去小数点的长度
+      return decimalPart[0].length - 1;
+    }
+
+    // 如果没有小数部分，则返回 0
+    return 0;
   }
 
   // form 验证

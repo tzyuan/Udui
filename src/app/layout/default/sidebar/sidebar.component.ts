@@ -53,11 +53,19 @@ export class LayoutDefaultSidebarComponent implements OnInit {
         },
         {
           level: 2,
-          title: '子账号',
+          title: '账号管理',
           selected: false,
           disabled: false,
           url: '/account/sub-account'
-        }
+        },
+        {
+          level: 2,
+          title: '邀请码管理',
+          selected: false,
+          disabled: false,
+          url: '/account/invite-code'
+        },
+
       ]
     }, {
       level: 1,
@@ -67,6 +75,13 @@ export class LayoutDefaultSidebarComponent implements OnInit {
       selected: false,
       disabled: false,
       children: [
+        {
+          level: 2,
+          title: '资金类型',
+          selected: false,
+          disabled: false,
+          url: '/order/fund-type-setting'
+        },
         {
           level: 2,
           title: '银行卡管理',
