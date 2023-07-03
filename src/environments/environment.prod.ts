@@ -1,5 +1,6 @@
 
+
 export const environment = {
-  production: true,
-  SERVER_URL: ''
+  production: false,
+  SERVER_URL: 'https://www.shashapayment.com'
 };

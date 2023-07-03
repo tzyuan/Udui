@@ -4,6 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { AddSubAccountComponent } from '../add-sub-account/add-sub-account.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-sub-account',
@@ -13,7 +14,7 @@ import { Validators } from '@angular/forms';
 export class SubAccountComponent implements OnInit {
   subAccount = '';
   subAaccountData: any = [];
-  permissionData: { label: string, value: string, checked: boolean }[] = [];
+  permissionData: any[] = [];
   loading = true;
   constructor(
     private http: HttpClient,
@@ -26,6 +27,7 @@ export class SubAccountComponent implements OnInit {
       nzTitle: '添加账号',
       nzContent: AddSubAccountComponent,
       nzComponentParams: { permissionData: this.permissionData },
+      nzWidth: 800,
       nzOnOk: (data) => {
         Object.values(data.form.controls).forEach(control => {
           if (control.invalid) {
@@ -33,13 +35,18 @@ export class SubAccountComponent implements OnInit {
             control.updateValueAndValidity({ onlySelf: true });
           }
         });
+        const permission = data.permissionData.filter(item => item.checked).map(item => item.value);
+        if (permission.length == 0) {
+          this.message.error('请选择权限');
+          return false;
+        }
         if (data.form.valid) {
-
           return new Promise((resolve, reject) => {
             this.http.post<any>('/admin/user/add', {
               username: data.form.value.username,
               password: data.form.value.password,
-              role: data.form.value.role
+              role: data.form.value.role,
+              permission: permission.join(',')
             }).subscribe({
               next: (res) => {
                 this.modal.create({
@@ -72,24 +79,55 @@ export class SubAccountComponent implements OnInit {
 
   getList = () => {
     this.loading = true;
-    this.http.get('/admin/users').subscribe({
-      next: (res) => {
-        this.subAaccountData = res;
-        this.loading = false;
+    this.http.get('/admin/users').subscribe(res => {
+      this.subAaccountData = res;
+      this.loading = false;
+    })
+  }
+
+  edit = (item: any) => {
+    const self = this;
+    this.modal.create({
+      nzTitle: '编辑权限',
+      nzContent: AddSubAccountComponent,
+      nzComponentParams: { permissionData: JSON.parse(JSON.stringify(this.permissionData)), isEdit: true, adminInfo: item },
+      nzWidth: 800,
+      nzOnOk: (data) => {
+        const permission = data.permissionData.filter(item => item.checked).map(item => item.value);
+        if (permission.length == 0) {
+          this.message.error('请选择权限');
+          return false;
+        }
+        return new Promise((resolve, reject) => {
+          this.http.post<any>('/admin/user/edit-permission', {
+            user_id: item.id,
+            permission: permission.join(',')
+          }).subscribe({
+            next: (res) => {
+              self.getList();
+              resolve(true);
+            },
+            error: (error) => {
+              reject(error);
+            }
+          })
+        })
       }
     })
   }
   ngOnInit(): void {
-    this.getList();
-    this.http.get<any>('/admin/user/permission-list').subscribe({
-      next: (res) => {
-        for (const i in res) {
-          if (Object.prototype.hasOwnProperty.call(res, i)) {
-            this.permissionData = [...this.permissionData, {
-              label: res[i], value: i, checked: false
-            }]
+    forkJoin([
+      this.http.get('/admin/users'),
+      this.http.get<any[]>('/admin/user/permission-list')
+    ]).subscribe({
+      next: (resArr) => {
+        this.subAaccountData = resArr[0];
+        this.permissionData = resArr[1].map(item => {
+          return {
+            label: item.title, value: item.id, url: item.url, checked: false
           }
-        }
+        })
+        this.loading = false;
       }
     })
   }

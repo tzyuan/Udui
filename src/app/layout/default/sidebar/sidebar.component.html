@@ -4,7 +4,7 @@
  * @lastTime: 2020-12-14 15:18:32
  -->
 <ul class="siderbar-box" nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: sidebarData }"></ng-container>
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: showSidebarData }"></ng-container>
   <ng-template #menuTpl let-menus>
     <ng-container *ngFor="let menu of menus">
       <li *ngIf="!menu.children" nz-menu-item nzMatchRouter [nzPaddingLeft]="menu.level * 24"

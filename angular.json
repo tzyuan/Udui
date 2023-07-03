@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "UduiAdmin": {
+    "shashapayAdmin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/udui-admin",
+            "outputPath": "dist/shashapay-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -38,7 +38,8 @@
               "src/theme.less",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "baseHref": "/shashapay-admin/"
           },
           "configurations": {
             "production": {
@@ -46,7 +47,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -71,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "UduiAdmin:build:production"
+              "browserTarget": "shashapayAdmin:build:production"
             },
             "development": {
-              "browserTarget": "UduiAdmin:build:development"
+              "browserTarget": "shashapayAdmin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "UduiAdmin:build"
+            "browserTarget": "shashapayAdmin:build"
           }
         },
         "test": {

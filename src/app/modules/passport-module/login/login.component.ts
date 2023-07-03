@@ -50,6 +50,10 @@ export class LoginComponent implements OnInit {
             this.cookies.setCookie('username', res.username, rememberTime);
             this.cookies.setCookie('role', res.role, rememberTime);
             this.cookies.setCookie('token', res.token.token, rememberTime);
+            if(res.permission){
+              const permission = res.permission.map((item: any) => item.url);
+              this.cookies.setCookie('permission', JSON.stringify(permission), rememberTime);
+            }
             this.message.success(`${res.username},欢迎登录!`)
             this.router.navigateByUrl('/');
           },

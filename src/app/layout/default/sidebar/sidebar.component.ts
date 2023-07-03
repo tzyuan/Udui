@@ -15,6 +15,7 @@ import { LayoutService } from 'src/app/shared/services/layout/layout.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, Params, Router } from '@angular/router';
 import { Subject, filter, startWith, takeUntil } from 'rxjs';
+import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 export interface BreadcrumbOption {
   label: string;
   params: Params;
@@ -27,6 +28,76 @@ export interface BreadcrumbOption {
 })
 export class LayoutDefaultSidebarComponent implements OnInit {
   isCollapsed = this.layout.isCollapsed;
+  // sidebarData: sidebar[] = [
+  //   {
+  //     level: 1,
+  //     title: '修改密码',
+  //     open: false,
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/account/reset-password'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '修改出款密码',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/account/reset-pay-password'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '账号管理',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/account/sub-account'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '邀请码管理',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/account/invite-code'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '资金类型',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/order/fund-type-setting'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '银行卡管理',
+  //     open: false,
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/order/bank-card'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '银行卡订单',
+  //     open: false,
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/order/bank-order'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '提现订单',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/order/withdrawal-order'
+  //   },
+  //   {
+  //     level: 1,
+  //     title: '充值订单列表',
+  //     selected: false,
+  //     disabled: false,
+  //     url: '/recharge-order/list'
+  //   }
+
+  // ];
+  showSidebarData: sidebar[] = [];
   sidebarData: sidebar[] = [
     {
       level: 1,
@@ -128,6 +199,7 @@ export class LayoutDefaultSidebarComponent implements OnInit {
   constructor(
     private layout: LayoutService,
     private injector: Injector,
+    private cookies: CookiesService
   ) {
 
   }
@@ -157,6 +229,17 @@ export class LayoutDefaultSidebarComponent implements OnInit {
     } catch (error) {
 
     }
+    if (this.cookies.getCookie('permission')) {
+      const permission = JSON.parse(this.cookies.getCookie('permission'));
+      this.sidebarData.forEach(item => {
+        item.children = item.children?.filter(chil => permission.includes(chil.url));
+      });
+      console.log(this.sidebarData);
+      this.showSidebarData = this.sidebarData.filter(item => item.children && item.children?.length > 0);
+    } else {
+      this.showSidebarData = this.sidebarData;
+    }
+
   }
 
   private getBreadcrumbs(

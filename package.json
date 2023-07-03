@@ -1,10 +1,10 @@
 {
-  "name": "udui-admin",
+  "name": "shashapay-admin",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
-    "build": "ng build",
+    "start": "ng serve  --open",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "nggc":"ng g c %npm_config_name% --skip-tests=true -m=%npm_config_m%"

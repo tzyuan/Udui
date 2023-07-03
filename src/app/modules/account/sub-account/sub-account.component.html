@@ -32,11 +32,11 @@
             </td>
             <td>{{i.last_login_time}}</td>
             <td>
-                <a href="#">编辑</a>
-                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="edit(i)">编辑权限</a>
+                <!-- <nz-divider nzType="vertical"></nz-divider>
                 <a href="#">重置密码</a>
                 <nz-divider nzType="vertical"></nz-divider>
-                <a href="#">删除</a>
+                <a href="#">删除</a> -->
             </td>
         </tr>
     </tbody>
