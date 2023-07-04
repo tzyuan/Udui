@@ -115,13 +115,13 @@ export class LayoutDefaultSidebarComponent implements OnInit {
           disabled: false,
           url: '/account/reset-password'
         },
-        {
-          level: 2,
-          title: '修改出款密码',
-          selected: false,
-          disabled: false,
-          url: '/account/reset-pay-password'
-        },
+        // {
+        //   level: 2,
+        //   title: '修改出款密码',
+        //   selected: false,
+        //   disabled: false,
+        //   url: '/account/reset-pay-password'
+        // },
         {
           level: 2,
           title: '账号管理',

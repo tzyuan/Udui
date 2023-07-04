@@ -94,34 +94,29 @@ export class BankOrderComponent implements OnInit {
     this.detailLoading = true;
     this.message.remove(this.msgId);
     this.msgId = this.message.loading('详情加载中', { nzDuration: 0 }).messageId;
-    forkJoin([
-      this.http.get<any>(`/admin/bank-cards/${order.bank_card_id}`),
-      this.http.get<any>(`/admin/users/${order.operator}`)
-    ]).subscribe(res => {
-      const [cardInfo, userInfo] = res;
+    this.http.get<any>(`/admin/bank-card-orders/${order.id}`).subscribe(res => {
       this.detailLoading = false;
       this.message.remove(this.msgId);
+      console.log(res);
       this.modal.create({
         nzTitle: '订单详情',
         nzWidth: 1000,
         nzContent: tplContent,
         nzComponentParams: {
           orderInfo: order,
-          cardInfo,
-          userInfo
+          cardInfo: res,
         }
       });
     })
 
-
   }
   // 审核/拒绝
-  merchantExamine = (order: any, status: 1 | 2) => {
+  merchantExamine = (order: any, status: 1 | 5) => {
     this.modal.confirm({
       nzTitle: status == 1 ? '通过审核' : '驳回订单',
       nzContent: status == 1 ? '确定将这笔订单通过审核吗?' : '确定驳回这笔订单吗?',
       nzOkText: status == 1 ? '通过' : '驳回',
-      nzOkDanger: status == 2,
+      nzOkDanger: status == 5,
       nzOnOk: () => {
         return new Promise((resolve, reject) => {
           this.http.patch(`/admin/bank-card-orders/${order.id}`, { status: status }).subscribe({

@@ -22,6 +22,7 @@ export class BankOrderBatchComponent implements OnInit {
   // 银行卡订单
   orderData: any[] = [];
   submitLoading = false;
+  basedataLoading = true;
   fundTypeData = [
     { label: '大混资金', value: 1 },
     { label: 'BC资金', value: 2 },
@@ -112,8 +113,15 @@ export class BankOrderBatchComponent implements OnInit {
 
 
 
-
   ngOnInit(): void {
-
+    this.http.get<any>('/admin/conf/funds').subscribe(res => {
+      this.basedataLoading = false;
+      this.fundTypeData = res.map((item: any) => {
+        return {
+          label: item.attr1,
+          value: item.id
+        }
+      })
+    });
   }
 }

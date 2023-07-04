@@ -28,10 +28,12 @@
             </td>
             <td>
                 <ng-container *ngIf="i.status==0">
+                 <ng-container *ngIf="isAdmin">
                     <a nz-typography [nzDisabled]="i.loading" (click)="deal(i)">确认转账</a>
                     <nz-divider nzType="vertical"></nz-divider>
                     <a nz-typography [nzDisabled]="i.loading" nzType="danger"
                         (click)="dealFail(i,dealFailOrderModalContent)">驳回</a>
+                 </ng-container>
                 </ng-container>
             </td>
         </tr>

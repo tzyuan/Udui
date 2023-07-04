@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-withdrawal-order',
@@ -16,6 +17,7 @@ export class WithdrawalOrderComponent implements OnInit {
   one_code = '';
   memo = '';
   tabIndex = 0;
+  isAdmin = !this.common.isMerchant();
   tabs = [
     { title: '待转账', value: 0 },
     { title: '已转账', value: 1 },
@@ -25,6 +27,7 @@ export class WithdrawalOrderComponent implements OnInit {
     private http: HttpClient,
     private modal: NzModalService,
     private message: NzMessageService,
+    private common: CommonService
   ) {
 
   }
