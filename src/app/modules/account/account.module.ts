@@ -8,6 +8,7 @@ import { SubAccountComponent } from './sub-account/sub-account.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AddSubAccountComponent } from './add-sub-account/add-sub-account.component';
 import { InviteCodeComponent } from './invite-code/invite-code.component';
+import { GoogleQrcodeComponent } from './google-qrcode/google-qrcode.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { InviteCodeComponent } from './invite-code/invite-code.component';
     SubAccountComponent,
     AddSubAccountComponent,
     InviteCodeComponent,
+    GoogleQrcodeComponent,
   ],
   imports: [
     CommonModule,

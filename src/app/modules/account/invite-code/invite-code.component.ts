@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-invite-code',
@@ -13,6 +14,7 @@ export class InviteCodeComponent implements OnInit {
     private http: HttpClient,
     private modal: NzModalService,
     private message: NzMessageService,
+    private common: CommonService,
   ) { }
   data: any[] = [];
   loading = false;
@@ -22,6 +24,7 @@ export class InviteCodeComponent implements OnInit {
     { title: '未使用', value: 0 },
     { title: '已使用', value: 1 },
   ];
+  donwLoadLoading = false;
   getData = () => {
     this.loading = true;
     const status = this.tabs[this.tabIndex].value;
@@ -59,6 +62,22 @@ export class InviteCodeComponent implements OnInit {
           })
         }
       }
+    })
+  }
+  downloadCode = () => {
+    this.donwLoadLoading = true;
+    this.http.get('/admin/user-invite-code/export?is_used=0', {
+      responseType: "blob",
+      headers: new HttpHeaders().append("Content-Type", "application/json")
+    }).subscribe(res => {
+      this.donwLoadLoading = false;
+      // 下载类型 xls
+      const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      // 下载类型：csv
+      const blob = new Blob([res], { type: contentType });
+      const url = window.URL.createObjectURL(blob);
+      // 打开新窗口方式进行下载
+      window.open(url);
     })
   }
   ngOnInit(): void {

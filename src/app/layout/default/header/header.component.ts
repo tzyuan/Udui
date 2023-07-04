@@ -4,6 +4,7 @@ import { CookiesService } from 'src/app/shared/services/cookies/cookies.service'
 import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/shared/services/layout/layout.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { GoogleQrcodeComponent } from 'src/app/modules/account/google-qrcode/google-qrcode.component';
 
 @Component({
   selector: 'app-layout-default-header',
@@ -35,7 +36,13 @@ export class LayoutDefaultHeaderComponent implements OnInit {
         this.router.navigate(['/passport/login']);
       }
     })
-
+  }
+  googleCode = () => {
+    this.modal.create({
+      nzTitle: '谷歌验证二维码',
+      nzContent: GoogleQrcodeComponent,
+      nzCancelText: null
+    })
   }
 
 

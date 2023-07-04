@@ -53,7 +53,7 @@ export class BankCardComponent implements OnInit {
   }
   filterData = () => {
     const tab = this.tabs[this.activeTab].value;
-    this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 0) === tab);
+    this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 1) === tab);
   }
   // 创建银行卡
   createBankCard = (tplContent: TemplateRef<{}>) => {
@@ -111,7 +111,7 @@ export class BankCardComponent implements OnInit {
   // 改变银行卡状态
   statusChange = (bankCard: any) => {
     bankCard.loading = true;
-    const newStatus = bankCard.status === 1 ? 0 : 1;
+    const newStatus = bankCard.status == 1 ? 0 : 1;
     this.http.patch(`/admin/bank-cards/${bankCard.id}`, { status: newStatus }).subscribe({
       next: (res) => {
         bankCard.loading = false;

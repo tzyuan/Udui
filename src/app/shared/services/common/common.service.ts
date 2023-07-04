@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { CookiesService } from '../cookies/cookies.service';
 import { FormGroup } from '@angular/forms';
@@ -46,6 +46,7 @@ export class CommonService {
     // 如果没有小数部分，则返回 0
     return 0;
   }
+
 
   // form 验证
   formValid = (validateForm: FormGroup) => {

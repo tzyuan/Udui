@@ -20,10 +20,10 @@
             </nz-form-item>
             <nz-form-item nzFlex>
                 <nz-form-control nzSpan="24">
-                    <nz-input-group [nzPrefix]="pwdPrefixTemplate">
+                    <nz-input-group [nzPrefix]="codePrefixTemplate">
                         <input formControlName="code" nz-input type="password" placeholder="谷歌验证码">
                     </nz-input-group>
-                    <ng-template #pwdPrefixTemplate><i nz-icon nzType="key" nzTheme="outline"></i></ng-template>
+                    <ng-template #codePrefixTemplate><i nz-icon nzType="google" nzTheme="outline"></i></ng-template>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item nzFlex>

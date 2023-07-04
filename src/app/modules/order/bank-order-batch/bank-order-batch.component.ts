@@ -28,8 +28,7 @@ export class BankOrderBatchComponent implements OnInit {
     { label: '常规资金', value: 3 }
   ]
   pwdForm = this.fb.group({
-    googleCode: [null, [Validators.required]],
-    payPassword: [null, [Validators.required]]
+    googleCode: [null, [Validators.required]]
   });
   del = (order: any) => {
     this.orderData = this.orderData.filter(item => item.bank_card_id !== order.bank_card_id);
@@ -42,7 +41,7 @@ export class BankOrderBatchComponent implements OnInit {
       if (!order.fund_type) { isError = true; }
     });
 
-    if (!isError && this.pwdForm.valid) {
+    if (!isError) {
       let orderPost: Observable<any>[] = [];
       this.submitLoading = true;
       // 生成银行卡订单请求
@@ -54,7 +53,8 @@ export class BankOrderBatchComponent implements OnInit {
           only_private: order.only_private ? 1 : 0,
           only_single: order.only_single ? 1 : 0,
           need_receipt: order.need_receipt ? 1 : 0,
-          memo: order.memo
+          memo: order.memo,
+          // googleCode: this.pwdForm.value.googleCode,
         }
         console.log(postData);
         orderPost.push(this.http.post('/admin/bank-card-orders', postData))

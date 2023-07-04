@@ -14,6 +14,7 @@ import { forkJoin } from 'rxjs';
 export class SubAccountComponent implements OnInit {
   subAccount = '';
   subAaccountData: any = [];
+  showSubAaccountData: any = [];
   permissionData: any[] = [];
   loading = true;
   constructor(
@@ -81,6 +82,7 @@ export class SubAccountComponent implements OnInit {
     this.loading = true;
     this.http.get('/admin/users').subscribe(res => {
       this.subAaccountData = res;
+      this.showSubAaccountData = this.subAaccountData;
       this.loading = false;
     })
   }
@@ -121,7 +123,9 @@ export class SubAccountComponent implements OnInit {
       this.http.get<any[]>('/admin/user/permission-list')
     ]).subscribe({
       next: (resArr) => {
+        console.log(resArr);
         this.subAaccountData = resArr[0];
+        this.showSubAaccountData = this.subAaccountData;
         this.permissionData = resArr[1].map(item => {
           return {
             label: item.title, value: item.id, url: item.url, checked: false

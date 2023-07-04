@@ -5,7 +5,7 @@
   <input *nzSpaceItem nz-input [(ngModel)]="max" placeholder="999999">
   <button *nzSpaceItem nz-button nzType="primary">立即查询</button> -->
   <button *nzSpaceItem nz-button nzType="primary" (click)="createBankCard(createBankCardContent)"><span nz-icon
-      nzType="credit-card" nzTheme="outline"></span>创建银行卡</button>
+          nzType="credit-card" nzTheme="outline"></span>创建银行卡</button>
 </nz-space>
 <nz-divider></nz-divider>
 <nz-tabset *ngIf="!isMerchant" [(nzSelectedIndex)]="activeTab" (nzSelectedIndexChange)="filterData()">
@@ -21,7 +21,7 @@
       <th>创建时间</th>
       <th>状态</th>
       <th>备注</th>
-      <th></th>
+      <th>操作</th>
     </tr>
   </thead>
   <tbody>
@@ -34,7 +34,7 @@
         <br>
         <span nz-typography nzType="secondary">{{i.bank_address}}</span>
       </td>
-      <td *ngIf="activeTab!=0">{{i.merchant_id}}</td>
+      <td *ngIf="activeTab!=0">{{i.merchant_name}}</td>
       <td>{{i.create_time}}</td>
       <td>
         <nz-tag *ngIf="i.status==0" nzColor="magenta">关闭</nz-tag>
@@ -42,25 +42,12 @@
       </td>
       <td>{{i.memo}}</td>
       <td>
-        <a [nzDisabled]="i.loading" nz-typography (click)="statusChange(i)">
-          <span *ngIf="i.status===0">开启</span>
-          <span *ngIf="i.status===1">关闭</span>
+        <a nz-typography [nzDisabled]="i.loading" (click)="statusChange(i)">
+          <span *ngIf="i.status==0">开启</span>
+          <span *ngIf="i.status==1">关闭</span>
         </a>
         <nz-divider nzType="vertical"></nz-divider>
         <a nz-typography nzType="danger" (click)="delBankCard(i,delBankCardContent)">删除</a>
-        <!-- <nz-divider nzType="vertical"></nz-divider> -->
-        <!-- <a href="#" (click)="del(i)">Remove</a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <nz-dropdown>
-          <a class="ant-dropdown-link" nz-dropdown>
-            More <span nz-icon type="down"></span>
-          </a>
-          <ul nz-menu>
-            <li nz-menu-item>
-              <a (click)="">active</a>
-            </li>
-          </ul>
-        </nz-dropdown>  -->
       </td>
     </tr>
   </tbody>

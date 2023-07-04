@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
     private message: NzMessageService
   ) { }
   loginForm = this.fb.group({
-    name: ['zhang', Validators.required],
-    pwd: ['aaa', Validators.required],
-    code: ['xxx', Validators.required],
+    name: ['', Validators.required],
+    pwd: ['', Validators.required],
+    code: ['', Validators.required],
     remember: [true]
   });
 
@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
       this.http.get<any>(`/admin/user/login?username=${this.loginForm.value.name}&password=${this.loginForm.value.pwd}&one_code=${this.loginForm.value.code}`)
         .subscribe({
           next: (res) => {
-            console.log(res);
             let rememberTime = this.loginForm.value.remember ? 7 * 24 : 24;
             this.cookies.setCookie('id', res.id, rememberTime);
             this.cookies.setCookie('merchant_id', res.merchant_id, rememberTime);

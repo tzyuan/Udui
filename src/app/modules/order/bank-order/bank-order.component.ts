@@ -45,6 +45,7 @@ export class BankOrderComponent implements OnInit {
     { title: '待支付', value: 2 },
     { title: '已完成', value: 3 },
     { title: '已取消', value: 4 },
+    { title: '已驳回', value: 5 },
   ]
   isMerchant = this.common.isMerchant();
   orderType = this.isMerchant;
@@ -80,9 +81,9 @@ export class BankOrderComponent implements OnInit {
   }
   filterList = () => {
     if (this.orderType) {
-      this.showOrderData = this.orderData.filter(item => item.merchant_id != 0)
+      this.showOrderData = this.orderData.filter(item => item.merchant_id != 1)
     } else {
-      this.showOrderData = this.orderData.filter(item => item.merchant_id == 0)
+      this.showOrderData = this.orderData.filter(item => item.merchant_id == 1)
     }
   }
   changeMerchant = () => {

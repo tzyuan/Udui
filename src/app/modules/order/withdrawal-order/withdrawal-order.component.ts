@@ -31,8 +31,8 @@ export class WithdrawalOrderComponent implements OnInit {
 
   getData = () => {
     this.loading = true;
-    const status=this.tabs[this.tabIndex].value
-    this.http.get<any>(`/admin/cash-orders`).subscribe({
+    const status = this.tabs[this.tabIndex].value
+    this.http.get<any>(`/admin/cash-orders?status=${status}`).subscribe({
       next: (res) => {
         this.loading = false;
         this.orderData = res;

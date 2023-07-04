@@ -7,7 +7,8 @@
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "nggc":"ng g c %npm_config_name% --skip-tests=true -m=%npm_config_m%"
+    "nggc":"ng g c %npm_config_name% --skip-tests=true -m=%npm_config_m%",
+    "prod": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --configuration production"
   },
   "private": true,
   "dependencies": {

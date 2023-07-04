@@ -1,13 +1,17 @@
 .container {
-    background-color: #999;
+    background-color: #f0f7ff;
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
-    bottom: 80px;
+    bottom: 0;
     overflow: hidden;
     display: flex;
     align-items: center;
+    background-image: url(../../../assets/login-bg.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+
 
     h1 {
         color: rgb(255, 255, 255);
