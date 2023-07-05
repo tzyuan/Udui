@@ -3,7 +3,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { CommonService } from 'src/app/shared/services/common/common.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-withdrawal-order',
   templateUrl: './withdrawal-order.component.html',
@@ -23,6 +23,15 @@ export class WithdrawalOrderComponent implements OnInit {
     { title: '已转账', value: 1 },
     { title: '已驳回', value: 2 },
   ];
+  searchData: {
+    user: string;
+    order_id: string;
+    range: (Date | null)[],
+  } = {
+      user: '',
+      order_id: '',
+      range: [],
+    }
   constructor(
     private http: HttpClient,
     private modal: NzModalService,
@@ -31,14 +40,53 @@ export class WithdrawalOrderComponent implements OnInit {
   ) {
 
   }
-
+  resetSearch = () => {
+    this.searchData = {
+      user: '',
+      order_id: '',
+      range: [],
+    }
+  }
+  page = {
+    index: 1,
+    size: 20,
+    total: 0
+  }
+  tabChange = (e: any) => {
+    console.log(e.index);
+    this.tabIndex = e.index;
+    this.page.index = 1;
+    this.page.total = 0;
+    this.getData();
+  }
+  pageIndexChange = (e: any) => {
+    console.log(e);
+  }
   getData = () => {
-    this.loading = true;
     const status = this.tabs[this.tabIndex].value
-    this.http.get<any>(`/admin/cash-orders?status=${status}`).subscribe({
+    let params: any = {
+      status: status,
+      page: this.page.index
+    };
+    if (this.searchData.user.trim() != '') {
+      params.user = this.searchData.user;
+    }
+    if (this.searchData.order_id.trim() != '') {
+      params.order_id = this.searchData.order_id;
+    }
+    if (this.searchData.range[0] != null && this.searchData.range[1] != null) {
+      params.start = moment(this.searchData.range[0]).format('YYYY-MM-DD');
+      params.end = moment(this.searchData.range[1]).format('YYYY-MM-DD');
+    }
+
+
+    this.loading = true;
+    this.http.get<any>(`/admin/cash-orders`, { params }).subscribe({
       next: (res) => {
         this.loading = false;
-        this.orderData = res;
+        this.orderData = res.list;
+        this.page.index = res.page;
+        this.page.total = parseInt(res.count);
         this.showOrderData = this.orderData;
       }
     })
