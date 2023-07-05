@@ -51,8 +51,10 @@ const routes: Routes = [
     path: 'passport',
     component: LayoutPassportComponent,
     children: [
-      { path: '', loadChildren: () => import('./passport-module/passport-module.module').then(mod => mod.PassportModuleModule), pathMatch: 'full', data: { title: '登录' } },
-      { path: 'login', loadChildren: () => import('./passport-module/passport-module.module').then(mod => mod.PassportModuleModule), data: { title: '登录' } }
+      {
+        path: 'admin',
+        loadChildren: () => import('./passport-module/passport-module.module').then(mod => mod.PassportModuleModule), data: { title: '登录' }
+      },
     ]
   }
 ];

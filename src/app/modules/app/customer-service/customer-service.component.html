@@ -1,1 +1,19 @@
-<p>customer-service works!</p>
+<div nz-form  nzLayout="horizontal">
+    <nz-form-item nzFlex>
+        <nz-form-label nzSpan="4">客服地址</nz-form-label>
+        <nz-form-control>
+            <input nz-input [(ngModel)]="kefu" placeholder="">
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzFlex>
+        <nz-form-label nzSpan="4">谷歌验证码</nz-form-label>
+        <nz-form-control>
+            <input nz-input [(ngModel)]="one_code" placeholder="">
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzFlex>
+        <nz-form-control nzOffset="4">
+            <button nz-button nzType="primary" (click)="submit()" [disabled]="canSubmit()" [nzLoading]="loading">修改</button>
+        </nz-form-control>
+    </nz-form-item>
+</div>

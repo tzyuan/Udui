@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
     if (token) {
       return true;
     }
-    this.router.navigateByUrl('/passport/login');
+    this.router.navigateByUrl('/passport/admin/login');
     return false;
   }
 }
@@ -49,6 +49,6 @@ export class ModuleActivate implements CanActivate {
       '/account': '233',
       '/pay': '233'
     };
-    return true;
+    return this.cookies.getCookie('token') != null;
   }
 }

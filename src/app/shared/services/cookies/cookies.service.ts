@@ -63,10 +63,11 @@ export class CookiesService {
    * 清除所有cookies
    */
   clearAll = () => {
-    const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+
     if (keys) {
-      for (let i = keys.length; i--;) {
-        document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
+      for (var i = keys.length; i--;) {
+        this.setCookie(keys[i], '', 0);
       }
     }
   }

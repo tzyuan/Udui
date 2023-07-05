@@ -14,14 +14,12 @@
     <nz-form-item nzFlex>
         <nz-form-label>资金类型</nz-form-label>
         <nz-form-control>
-            <nz-select style="min-width: 200px;" [(ngModel)]="searchData.fund_type" name="value" nzPlaceHolder="" nzAllowClear>
-              <nz-option
-                *ngFor="let item of fundTypeData"
-                [nzLabel]="item.label"
-                [nzValue]="item.value">
-              </nz-option>
+            <nz-select style="min-width: 200px;" [(ngModel)]="searchData.fund_type" name="value" nzPlaceHolder=""
+                nzAllowClear>
+                <nz-option *ngFor="let item of fundTypeData" [nzLabel]="item.label" [nzValue]="item.value">
+                </nz-option>
             </nz-select>
-            
+
         </nz-form-control>
     </nz-form-item>
     <nz-form-item nzFlex>
@@ -53,7 +51,10 @@
 <nz-tabset *ngIf="orderType" [(nzSelectedIndex)]="tabIndex" (nzSelectChange)="tabChange($event)">
     <nz-tab *ngFor="let item of tabs2" [nzTitle]="item.title"></nz-tab>
 </nz-tabset>
-<nz-table #nzTable [nzShowTotal]="totalTemplate" [nzData]="showOrderData" nzFrontPagination="false" [nzLoading]="loading" nzSize="small" [(nzPageIndex)]="page.index" [(nzPageSize)]="page.size" [nzTotal]="page.total" (nzPageIndexChange)="pageIndexChange($event)">    <thead>
+<nz-table #nzTable [nzShowTotal]="totalTemplate" [nzData]="showOrderData" nzFrontPagination="false"
+    [nzLoading]="loading" nzSize="small" [(nzPageIndex)]="page.index" [(nzPageSize)]="page.size" [nzTotal]="page.total"
+    (nzPageIndexChange)="pageIndexChange($event)">
+    <thead>
         <tr>
             <th>订单号</th>
             <!-- <th>银行</th> -->
@@ -115,9 +116,12 @@
             <nz-descriptions-item nzTitle="充值金额">{{params.orderInfo.amount | currency:''}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="汇率">{{params.orderInfo.exchange_rate | currency:''}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="标签">
-                <ng-container *ngIf="params.orderInfo.only_private==1"><nz-tag nzColor="processing">仅限私卡</nz-tag></ng-container>
-                <ng-container *ngIf="params.orderInfo.only_single==1"><nz-tag nzColor="processing">不可拆单</nz-tag></ng-container>
-                <ng-container *ngIf="params.orderInfo.need_receipt==1"><nz-tag nzColor="processing">需要电子回单</nz-tag></ng-container>
+                <ng-container *ngIf="params.orderInfo.only_private==1"><nz-tag
+                        nzColor="processing">仅限私卡</nz-tag></ng-container>
+                <ng-container *ngIf="params.orderInfo.only_single==1"><nz-tag
+                        nzColor="processing">不可拆单</nz-tag></ng-container>
+                <ng-container *ngIf="params.orderInfo.need_receipt==1"><nz-tag
+                        nzColor="processing">需要电子回单</nz-tag></ng-container>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="状态">
                 <ng-container [ngSwitch]="params.orderInfo.status">
@@ -142,6 +146,6 @@
     </nz-skeleton>
 </ng-template>
 
-<ng-template #totalTemplate >
+<ng-template #totalTemplate>
     共{{page.total}}笔
 </ng-template>
