@@ -3,6 +3,7 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 
 @Component({
   selector: 'app-recharge-order-detail',
@@ -21,7 +22,8 @@ export class RechargeOrderDetailComponent implements OnInit {
     private http: HttpClient,
     private modal: NzModalService,
     private message: NzMessageService,
-    private drawerRef: NzDrawerRef<string>
+    private drawerRef: NzDrawerRef<string>,
+    private cookies: CookiesService
   ) {
   }
 
@@ -82,6 +84,10 @@ export class RechargeOrderDetailComponent implements OnInit {
         })
       }
     });
+  }
+
+  isMineOrder=()=>{
+    return this.orderDetailData.merchant_id == this.cookies.getCookie('merchant_id');
   }
 
   getList = () => {

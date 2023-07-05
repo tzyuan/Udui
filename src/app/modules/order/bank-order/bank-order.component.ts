@@ -126,6 +126,7 @@ export class BankOrderComponent implements OnInit {
     this.tabIndex = e.index;
     this.page.index = 1;
     this.page.total = 0;
+    this.resetSearch();
     this.getData();
   }
   pageIndexChange = (e: any) => {

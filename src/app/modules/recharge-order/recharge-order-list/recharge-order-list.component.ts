@@ -30,6 +30,22 @@ export class RechargeOrderListComponent implements OnInit {
         size: 20,
         total: 0
     }
+    searchData = {
+        merchant_id: '',
+        pay_order_no: '',
+        app_user: ''
+    }
+    resetSearch = () => {
+        this.searchData = {
+            merchant_id: '',
+            pay_order_no: '',
+            app_user: ''
+        }
+    }
+    search = () => {
+        this.page.index = 1;
+        this.getData();
+    }
 
     getData = () => {
         this.loading = true;
@@ -37,14 +53,27 @@ export class RechargeOrderListComponent implements OnInit {
             status: this.statusData[this.tabIndex].value,
             page: this.page.index
         }
-        if(this.tabIndex == 0){
+        if (this.tabIndex == 0) {
             delete params.status;
         }
+        if (this.searchData.merchant_id.trim() != '') {
+            params.merchant_id = this.searchData.merchant_id.trim();
+        }
+        if (this.searchData.pay_order_no.trim() != '') {
+            params.pay_order_no = this.searchData.pay_order_no.trim();
+        }
+        if (this.searchData.app_user.trim() != '') {
+            params.app_user = this.searchData.app_user.trim();
+        }
+
 
         this.http.get<any>(`/admin/recharge-orders`, { params }).subscribe({
             next: (res) => {
                 this.loading = false;
-                this.orderData = res.list;
+                this.orderData = res.list.map((item: any) => {
+                    item.uAmount = (Number(item.amount) / Number(item.exchange_rate)).toFixed(4);
+                    return item;
+                });
                 this.page.index = res.page;
                 this.page.total = parseInt(res.count);
 
@@ -52,10 +81,10 @@ export class RechargeOrderListComponent implements OnInit {
         })
     }
     tabChange = (e: any) => {
-        console.log(e);
         this.tabIndex = e.index;
         this.page.index = 1;
         this.page.total = 0;
+        this.resetSearch();
         this.getData();
     }
     pageIndexChange = (e: any) => {

@@ -1,4 +1,3 @@
-
 <nz-skeleton [nzActive]="true" [nzLoading]="loading">
     <nz-descriptions nzTitle="银行卡订单">
         <nz-descriptions-item nzTitle="订单编号">{{orderDetailData.order_no}}</nz-descriptions-item>
@@ -37,7 +36,8 @@
         </nz-descriptions-item>
     </nz-descriptions>
     <nz-divider></nz-divider>
-    <nz-space *ngIf="orderDetailData.status==1">
+    <nz-space *ngIf="orderDetailData.status==1&&isMineOrder()">
+    <!-- <nz-space *ngIf="isMineOrder()"> -->
         <button *nzSpaceItem nz-button nzType="primary" (click)="checkInOrder(checkInOrderModalContent)">审核通过</button>
         <button *nzSpaceItem nz-button nzDanger nzType="primary"
             (click)="checkOutOrder(checkOutOrderModalContent)">驳回</button>
