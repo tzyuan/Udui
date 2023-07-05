@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent, data: { breadcrumb: '修改密码' } },
   { path: 'reset-pay-password', component: ResetPayPasswordComponent, data: { breadcrumb: '修改出款密码' } },
   { path: 'sub-account', component: SubAccountComponent, data: { breadcrumb: '账号管理' } },
-  { path: 'invite-code', component: InviteCodeComponent, data: { breadcrumb: '邀请码管理' } }
+  { path: 'invite-code', component: InviteCodeComponent, data: { breadcrumb: '邀请码管理' } },
 ];
 
 @NgModule({

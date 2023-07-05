@@ -168,6 +168,12 @@ export class LayoutDefaultSidebarComponent implements OnInit {
           selected: false,
           disabled: false,
           url: '/order/bank-order'
+        }, {
+          level: 2,
+          title: '充值订单',
+          selected: false,
+          disabled: false,
+          url: '/recharge-order/list'
         },
         {
           level: 2,
@@ -179,7 +185,7 @@ export class LayoutDefaultSidebarComponent implements OnInit {
       ]
     }, {
       level: 1,
-      title: '充值订单',
+      title: 'APP管理',
       icon: 'bars',
       open: false,
       selected: false,
@@ -187,10 +193,24 @@ export class LayoutDefaultSidebarComponent implements OnInit {
       children: [
         {
           level: 2,
-          title: '充值订单列表',
+          title: 'APP用户',
           selected: false,
           disabled: false,
-          url: '/recharge-order/list'
+          url: '/app/user-list'
+        },
+        {
+          level: 2,
+          title: '客服设置',
+          selected: false,
+          disabled: false,
+          url: '/app/customer-service'
+        },
+        {
+          level: 2,
+          title: 'Banner公告',
+          selected: false,
+          disabled: false,
+          url: '/app/banner-setting'
         }
       ]
     }
@@ -232,9 +252,9 @@ export class LayoutDefaultSidebarComponent implements OnInit {
     if (this.cookies.getCookie('permission')) {
       const permission = JSON.parse(this.cookies.getCookie('permission'));
       this.sidebarData.forEach(item => {
+        console.log(item.title)
         item.children = item.children?.filter(chil => permission.includes(chil.url));
       });
-      console.log(this.sidebarData);
       this.showSidebarData = this.sidebarData.filter(item => item.children && item.children?.length > 0);
     } else {
       this.showSidebarData = this.sidebarData;

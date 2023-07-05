@@ -49,6 +49,32 @@ export class BankOrderComponent implements OnInit {
   ]
   isMerchant = this.common.isMerchant();
   orderType = this.isMerchant;
+  fundTypeData: any[] = [];
+  page = {
+    index: 1,
+    size: 20,
+    total: 0
+  }
+  searchData: {
+    user: string;
+    order_id: string;
+    fund_type: number | null;
+  } = {
+      user: '',
+      order_id: '',
+      fund_type: null,
+    }
+  resetSearch = () => {
+    this.searchData = {
+      user: '',
+      order_id: '',
+      fund_type: null
+    }
+  }
+  search = () => {
+    this.page.index = 1;
+    this.getData();
+  }
 
   createOrder = () => {
     const createDrawer = this.drawer.create({
@@ -61,23 +87,50 @@ export class BankOrderComponent implements OnInit {
     });
     createDrawer.afterClose.subscribe(res => {
       if (res === 'submit') {
-        this.getList();
+        this.getData();
       }
     })
   }
-  getList = () => {
+  getData = () => {
     this.loading = true;
     const status = this.orderType ? this.tabs2[this.tabIndex].value : this.tabs[this.tabIndex].value;
-    this.http.get<any>('/admin/bank-card-orders?status=' + status).subscribe({
+    let params: any = {
+      status,
+      page: this.page.index
+    }
+
+    if (this.searchData.order_id.trim() != '') {
+      params.order_no = this.searchData.order_id.trim();
+    }
+    if (this.searchData.fund_type != null) {
+      params.fund_type = this.searchData.fund_type;
+    }
+
+
+
+    this.http.get<any>('/admin/bank-card-orders', { params }).subscribe({
       next: (res) => {
         this.loading = false;
-        this.orderData = res;
+        this.orderData = res.list;
+        this.page.index = res.page;
+        this.page.total = parseInt(res.count);
+        this.showOrderData = this.orderData;
         this.filterList();
       },
       error: (err) => {
         this.loading = false;
       },
     })
+  }
+  tabChange = (e: any) => {
+    this.tabIndex = e.index;
+    this.page.index = 1;
+    this.page.total = 0;
+    this.getData();
+  }
+  pageIndexChange = (e: any) => {
+    this.page.index = e;
+    this.getData();
   }
   filterList = () => {
     if (this.orderType) {
@@ -88,7 +141,9 @@ export class BankOrderComponent implements OnInit {
   }
   changeMerchant = () => {
     this.tabIndex = 0;
-    this.getList();
+    this.page.index = 1;
+    this.page.total = 0;
+    this.getData();
   }
   showDetail = (tplContent: TemplateRef<{}>, order: any) => {
     this.detailLoading = true;
@@ -122,7 +177,7 @@ export class BankOrderComponent implements OnInit {
           this.http.patch(`/admin/bank-card-orders/${order.id}`, { status: status }).subscribe({
             next: () => {
               this.message.success('审核成功');
-              this.getList();
+              this.getData();
               resolve(true);
             },
             error: () => {
@@ -136,6 +191,14 @@ export class BankOrderComponent implements OnInit {
     let modalParasm = {}
   }
   ngOnInit(): void {
-    this.getList();
+    this.getData();
+    this.http.get<any>('/admin/conf/funds').subscribe(res => {
+      this.fundTypeData = res.map((item: any) => {
+        return {
+          label: item.attr1,
+          value: item.id
+        }
+      })
+    });
   }
 }

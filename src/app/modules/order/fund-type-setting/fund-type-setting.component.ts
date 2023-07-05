@@ -18,9 +18,11 @@ export class FundTypeSettingComponent implements OnInit {
   ) { }
   data: any[] = [];
   loading = false;
+  del_one_code = '';
   newData = {
     name: '',
-    rate: ''
+    rate: '',
+    one_code: ''
   }
   getData = () => {
     this.loading = true;
@@ -37,37 +39,56 @@ export class FundTypeSettingComponent implements OnInit {
       }
     })
   }
-  edit = (value: string, key: string, item: any) => {
-    this.loading = true;
-    this.http.post('/admin/conf/fund-edit', {
-      id: item.id,
+  edit = (item: any, telContent: TemplateRef<{}>) => {
+    this.newData = {
       name: item.attr1,
-      rate: item.attr2
-    }).subscribe({
-      next: (res) => {
-        this.message.success('修改成功');
-        this.loading = false;
-      },
-      error: (err) => {
-        this.loading = false;
-
+      rate: `${item.attr2}`,
+      one_code: ''
+    }
+    this.modal.create({
+      nzTitle: '编辑资金类型',
+      nzContent: telContent,
+      nzOnOk: () => {
+        if (this.newData.name.trim() == '' || this.newData.rate.trim() == '' || this.common.countDecimalPlaces(this.newData.rate) > 4 || this.newData.one_code.trim() == '') {
+          this.message.error('请输入正确的内容');
+          return false;
+        } else {
+          return new Promise((resolve, reject) => {
+            this.http.post('/admin/conf/fund-edit', {
+              id: item.id,
+              name: this.newData.name,
+              rate: this.newData.rate,
+              one_code: this.newData.one_code
+            }).subscribe({
+              next: (res) => {
+                resolve(true);
+                this.message.success('修改成功');
+                this.getData()
+              },
+              error: (err) => {
+                resolve(false);
+              }
+            })
+          })
+        }
       }
     })
   }
-  del = (item: any) => {
+  del = (item: any, telContent: TemplateRef<{}>) => {
+    this.del_one_code = '';
     this.modal.confirm({
       nzTitle: '确认删除吗?',
-      nzContent: '确认后数据将被删除!',
+      nzContent: telContent,
       nzOnOk: () => {
         return new Promise((resolve, reject) => {
-          this.http.post('/admin/conf/fund-delete', { id: item.id }).subscribe({
+          this.http.post('/admin/conf/fund-delete', { id: item.id, one_code: this.del_one_code }).subscribe({
             next: (res) => {
               resolve(true);
               this.message.success('删除成功');
               this.getData()
             },
             error: (err) => {
-              reject(false);
+              resolve(false);
             }
           })
         })
@@ -75,6 +96,11 @@ export class FundTypeSettingComponent implements OnInit {
     })
   }
   add = (telContent: TemplateRef<{}>) => {
+    this.newData = {
+      name: '',
+      rate: '',
+      one_code: ''
+    }
     this.modal.create({
       nzTitle: '新增资金类型',
       nzContent: telContent,

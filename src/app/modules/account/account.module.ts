@@ -18,7 +18,7 @@ import { GoogleQrcodeComponent } from './google-qrcode/google-qrcode.component';
     SubAccountComponent,
     AddSubAccountComponent,
     InviteCodeComponent,
-    GoogleQrcodeComponent,
+    GoogleQrcodeComponent
   ],
   imports: [
     CommonModule,

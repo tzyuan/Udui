@@ -47,6 +47,10 @@ export class WithdrawalOrderComponent implements OnInit {
       range: [],
     }
   }
+  search = () => {
+    this.page.index = 1;
+    this.getData()
+  }
   page = {
     index: 1,
     size: 20,
@@ -60,7 +64,8 @@ export class WithdrawalOrderComponent implements OnInit {
     this.getData();
   }
   pageIndexChange = (e: any) => {
-    console.log(e);
+    this.page.index = e;
+    this.getData();
   }
   getData = () => {
     const status = this.tabs[this.tabIndex].value
@@ -69,14 +74,14 @@ export class WithdrawalOrderComponent implements OnInit {
       page: this.page.index
     };
     if (this.searchData.user.trim() != '') {
-      params.user = this.searchData.user;
+      params.username = this.searchData.user;
     }
     if (this.searchData.order_id.trim() != '') {
-      params.order_id = this.searchData.order_id;
+      params.cash_order_no = this.searchData.order_id;
     }
     if (this.searchData.range[0] != null && this.searchData.range[1] != null) {
-      params.start = moment(this.searchData.range[0]).format('YYYY-MM-DD');
-      params.end = moment(this.searchData.range[1]).format('YYYY-MM-DD');
+      params.start_date = moment(this.searchData.range[0]).format('YYYY-MM-DD');
+      params.end_date = moment(this.searchData.range[1]).format('YYYY-MM-DD');
     }
 
 

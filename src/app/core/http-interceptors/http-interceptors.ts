@@ -70,15 +70,12 @@ export class DefaultInterceptor implements HttpInterceptor {
                 // 允许统一对请求错误处理
                 if (event instanceof HttpResponseBase) {
                     if (event.status === 200) {
-                        console.log(req.responseType);
                         if (req.responseType === 'blob') {
-                            console.log('in blob');
                             return of(event);
                         }
 
                         if (event instanceof HttpResponse) {
                             if (event.body.code === 200) {
-                                console.log(event.body.data);
                                 return of(new HttpResponse(Object.assign({ body: event.body.data })));
                             } else {
                                 return throwError({
