@@ -33,7 +33,7 @@ export class BankCardComponent implements OnInit {
 
   });
   isMerchant = this.common.isMerchant();
-  activeTab = 0;
+  tabIndex = 0;
   tabs = [
     { title: '自营银行卡', value: true },
     { title: '商户银行卡', value: false },
@@ -43,11 +43,28 @@ export class BankCardComponent implements OnInit {
     size: 20,
     total: 0
   }
+  searchData = {
+    merchant_id: '',
+    card_no: ''
+  }
 
-
+  resetSearch = () => {
+    this.searchData = {
+      merchant_id: '',
+      card_no: '',
+    }
+  }
   getData = () => {
     let params: any = {
-      page: this.page.index
+      page: this.page.index,
+      is_merchant: this.tabIndex
+    }
+
+    if (this.searchData.card_no.trim() != '') {
+      params.card_no = this.searchData.card_no.trim();
+    }
+    if (this.searchData.merchant_id.trim() != '') {
+      params.merchant_id = this.searchData.merchant_id.trim();
     }
 
     this.loading = true;
@@ -55,7 +72,6 @@ export class BankCardComponent implements OnInit {
       next: (res) => {
         this.loading = false;
         this.bankCardData = res.list;
-        this.filterData();
       },
       error: (err) => {
         this.loading = false;
@@ -63,9 +79,11 @@ export class BankCardComponent implements OnInit {
       }
     })
   }
-  filterData = () => {
-    // const tab = this.tabs[this.activeTab].value;
-    // this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 1) === tab);
+  tabChange = (e: any) => {
+    this.tabIndex = e.index;
+    this.page.index = 1;
+    this.page.total = 0;
+    this.resetSearch()
     this.getData();
   }
   search = () => {
@@ -146,7 +164,7 @@ export class BankCardComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.activeTab = !this.isMerchant ? 0 : 1;
+    this.tabIndex = !this.isMerchant ? 0 : 1;
     this.getData();
   }
 }
