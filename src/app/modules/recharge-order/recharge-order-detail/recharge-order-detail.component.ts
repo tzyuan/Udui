@@ -16,6 +16,7 @@ export class RechargeOrderDetailComponent implements OnInit {
   loading = true;
   orderDetailData: any = {};
   memo = '';
+  one_code = '';
   constructor(
     private http: HttpClient,
     private modal: NzModalService,
@@ -24,15 +25,17 @@ export class RechargeOrderDetailComponent implements OnInit {
   ) {
   }
 
-  checkInOrder = () => {
+  checkInOrder = (telContent: TemplateRef<{}>) => {
+    this.one_code = '';
     this.modal.confirm({
-      nzTitle: '提示',
-      nzContent: '确认审核通过吗?',
+      nzTitle: '审核通过',
+      nzContent: telContent,
       nzOkText: '确认通过',
       nzOnOk: () => {
         return new Promise((resolve, reject) => {
           this.http.post('/admin/recharge-order/check', {
             pay_order_id: this.id,
+            one_code: this.one_code,
             status: 2
           }).subscribe({
             next: (res) => {
@@ -49,7 +52,7 @@ export class RechargeOrderDetailComponent implements OnInit {
     })
 
   }
-  checkOutOrder = (telContent: TemplateRef<{}>,) => {
+  checkOutOrder = (telContent: TemplateRef<{}>) => {
     this.memo = '';
     this.modal.create({
       nzTitle: '请输入驳回原因',

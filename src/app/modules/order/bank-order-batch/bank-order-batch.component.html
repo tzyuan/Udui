@@ -23,13 +23,13 @@
             </td>
             <td>
                 <nz-input-number [(ngModel)]="i.amount" [nzStep]="1" [nzPrecision]="2" [nzMin]="0"
-                                 [nzStatus]="i.amount<=0?'error':''"></nz-input-number>
+                    [nzStatus]="i.amount<=0?'error':''"></nz-input-number>
             </td>
             <td>
                 <nz-select style="width:100px;" [(ngModel)]="i.fund_type" name="value" nzPlaceHolder="" nzAllowClear
-                           [nzStatus]="!i.fund_type?'error':''" [nzDisabled]="basedataLoading">
+                    [nzStatus]="!i.fund_type?'error':''" [nzDisabled]="basedataLoading">
                     <nz-option *ngFor="let option of fundTypeData" [nzLabel]="option.label"
-                               [nzValue]="option.value"></nz-option>
+                        [nzValue]="option.value"></nz-option>
                 </nz-select>
 
             </td>
@@ -48,36 +48,18 @@
     </tbody>
 </nz-table>
 <div class="mb20" style="max-width: 600px;">
+    <p><input nz-input [(ngModel)]="one_code" placeholder="谷歌验证码" [disabled]="orderData.length == 0"></p>
     <nz-space>
-        <button *nzSpaceItem nz-button nzType="primary" (click)="submit()" [nzLoading]="submitLoading">提交</button>
+        <button *nzSpaceItem nz-button nzType="primary" (click)="submit()" [nzLoading]="submitLoading" [disabled]="orderData.length == 0 || one_code.trim()==''">提交</button>
         <button *nzSpaceItem nz-button (click)="back()" [disabled]="submitLoading">返回</button>
     </nz-space>
-    <!-- <form nz-form [formGroup]="pwdForm">
-        <nz-form-item nzFlex>
-            <nz-form-label [nzSm]="4" nzRequired>谷歌验证码</nz-form-label>
-            <nz-form-control [nzSm]="14">
-                <input nz-input formControlName="googleCode">
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex>
-            <nz-form-label [nzSm]="4" nzRequired>出款密码</nz-form-label>
-            <nz-form-control [nzSm]="14">
-                <input nz-input formControlName="payPassword">
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex>
-            <nz-form-control [nzOffset]="4">
-               
-            </nz-form-control>
-        </nz-form-item>
-    </form> -->
 </div>
 
 
 
 <!-- 选择银行卡抽屉 -->
 <nz-drawer [(nzVisible)]="bankCardVisible" nzTitle="选择银行卡" (nzOnClose)="bankCardVisible=false" nzWidth="80%"
-           [nzFooter]="bankCardFooter">
+    [nzFooter]="bankCardFooter">
     <ng-container *nzDrawerContent>
         <app-bank-order-batch-bank-card #bankCard [orderData]="orderData"></app-bank-order-batch-bank-card>
     </ng-container>

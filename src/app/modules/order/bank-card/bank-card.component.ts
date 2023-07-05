@@ -28,7 +28,9 @@ export class BankCardComponent implements OnInit {
     bank_name: [null, [Validators.required]],
     card_no: [null, [Validators.required]],
     bank_address: [null, [Validators.required]],
+    one_code: [null, [Validators.required]],
     memo: [null],
+
   });
   isMerchant = this.common.isMerchant();
   activeTab = 0;
@@ -36,13 +38,23 @@ export class BankCardComponent implements OnInit {
     { title: '自营银行卡', value: true },
     { title: '商户银行卡', value: false },
   ];
+  page = {
+    index: 1,
+    size: 20,
+    total: 0
+  }
 
-  getList = () => {
+
+  getData = () => {
+    let params: any = {
+      page: this.page.index
+    }
+
     this.loading = true;
-    this.http.get<any>('/admin/bank-cards').subscribe({
+    this.http.get<any>('/admin/bank-cards', { params }).subscribe({
       next: (res) => {
         this.loading = false;
-        this.bankCardData = res;
+        this.bankCardData = res.list;
         this.filterData();
       },
       error: (err) => {
@@ -52,8 +64,17 @@ export class BankCardComponent implements OnInit {
     })
   }
   filterData = () => {
-    const tab = this.tabs[this.activeTab].value;
-    this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 1) === tab);
+    // const tab = this.tabs[this.activeTab].value;
+    // this.showBankCardData = this.bankCardData.filter(item => (item.merchant_id == 1) === tab);
+    this.getData();
+  }
+  search = () => {
+    this.page.index = 1;
+    this.getData();
+  }
+  pageIndexChange = (e: any) => {
+    this.page.index = e;
+    this.getData();
   }
   // 创建银行卡
   createBankCard = (tplContent: TemplateRef<{}>) => {
@@ -75,11 +96,11 @@ export class BankCardComponent implements OnInit {
           this.http.post('/admin/bank-card/create', this.addForm.value).subscribe({
             next: () => {
               this.message.success('添加成功');
-              this.getList();
+              this.getData();
               resolve(true);
             },
             error: () => {
-              reject(false);
+              resolve(false);
             }
           })
         })
@@ -99,7 +120,7 @@ export class BankCardComponent implements OnInit {
           this.http.delete(`/admin/bank-cards/${bankCard.id}`).subscribe({
             next: (res) => {
               this.message.success('删除成功');
-              this.getList();
+              this.getData();
               resolve(true);
             },
             error: (err) => { reject(false) },
@@ -117,7 +138,7 @@ export class BankCardComponent implements OnInit {
         bankCard.loading = false;
         bankCard.status = newStatus;
         this.message.success('修改成功');
-        // this.getList();
+        // this.getData();
       },
       error: (error) => {
         bankCard.loading = false;
@@ -126,6 +147,6 @@ export class BankCardComponent implements OnInit {
   }
   ngOnInit(): void {
     this.activeTab = !this.isMerchant ? 0 : 1;
-    this.getList();
+    this.getData();
   }
 }

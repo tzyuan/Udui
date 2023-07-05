@@ -16,7 +16,7 @@ export class RechargeOrderListComponent implements OnInit {
 
     orderData: any[] = [];
     loading = false;
-    activeTab = 0;
+    tabIndex = 0;
     statusData = [
         { title: '全部', value: 'all' },
         { title: '未充值', value: 0, type: 'warning' },
@@ -25,15 +25,42 @@ export class RechargeOrderListComponent implements OnInit {
         { title: '已完成', value: 2, type: 'success' },
     ];
     statusMap: any = {};
+    page = {
+        index: 1,
+        size: 20,
+        total: 0
+    }
+
     getData = () => {
         this.loading = true;
-        const status = this.activeTab == 0 ? '' : `status=${this.statusData[this.activeTab].value}`
-        this.http.get<any>(`/admin/recharge-orders?${status}`).subscribe({
+        let params: any = {
+            status: this.statusData[this.tabIndex].value,
+            page: this.page.index
+        }
+        if(this.tabIndex == 0){
+            delete params.status;
+        }
+
+        this.http.get<any>(`/admin/recharge-orders`, { params }).subscribe({
             next: (res) => {
                 this.loading = false;
-                this.orderData = res;
+                this.orderData = res.list;
+                this.page.index = res.page;
+                this.page.total = parseInt(res.count);
+
             }
         })
+    }
+    tabChange = (e: any) => {
+        console.log(e);
+        this.tabIndex = e.index;
+        this.page.index = 1;
+        this.page.total = 0;
+        this.getData();
+    }
+    pageIndexChange = (e: any) => {
+        this.page.index = e;
+        this.getData();
     }
     showDetail = (order: any) => {
         const detail = this.drawer.create({

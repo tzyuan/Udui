@@ -23,6 +23,7 @@ export class BankOrderBatchComponent implements OnInit {
   orderData: any[] = [];
   submitLoading = false;
   basedataLoading = true;
+  one_code = '';
   fundTypeData = [
     { label: '大混资金', value: 1 },
     { label: 'BC资金', value: 2 },
@@ -55,6 +56,7 @@ export class BankOrderBatchComponent implements OnInit {
           only_single: order.only_single ? 1 : 0,
           need_receipt: order.need_receipt ? 1 : 0,
           memo: order.memo,
+          one_code: this.one_code
           // googleCode: this.pwdForm.value.googleCode,
         }
         console.log(postData);

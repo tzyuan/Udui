@@ -38,7 +38,7 @@
     </nz-descriptions>
     <nz-divider></nz-divider>
     <nz-space *ngIf="orderDetailData.status==1">
-        <button *nzSpaceItem nz-button nzType="primary" (click)="checkInOrder()">审核通过</button>
+        <button *nzSpaceItem nz-button nzType="primary" (click)="checkInOrder(checkInOrderModalContent)">审核通过</button>
         <button *nzSpaceItem nz-button nzDanger nzType="primary"
             (click)="checkOutOrder(checkOutOrderModalContent)">驳回</button>
     </nz-space>
@@ -48,4 +48,7 @@
 
 <ng-template #checkOutOrderModalContent>
     <input nz-input [(ngModel)]="memo" placeholder="驳回原因">
+</ng-template>
+<ng-template #checkInOrderModalContent>
+    <input nz-input [(ngModel)]="one_code" placeholder="谷歌验证码">
 </ng-template>
