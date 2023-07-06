@@ -1,13 +1,14 @@
-<div style="width: 500px;">
+<div style="width: 500px;" *ngIf="!showDetail">
     <form nz-form [formGroup]="bannerForm" nzLayout="horizontal">
         <nz-form-item nzFlex>
             <nz-form-label nzRequired>图片</nz-form-label>
             <nz-form-control>
-                <nz-upload nzAction="/admin/bank-card-order/upload-img" nzListType="picture"
-                           [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1">
+                <nz-upload nzAction="/admin/bank-card-order/upload-img" nzListType="picture" nzName="img"
+                    [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1" (nzChange)="uploadChange($event)"
+                    (nzRemove)="removeFile()">
                     <button nz-button>
                         <span nz-icon nzType="upload"></span>
-                        Upload
+                        上传图片
                     </button>
                 </nz-upload>
             </nz-form-control>
@@ -15,8 +16,22 @@
         <nz-form-item nzFlex>
             <nz-form-label nzRequired>内容</nz-form-label>
             <nz-form-control>
-                <textarea nz-input formControlName="content" [nzAutosize]="{ minRows: 3, maxRows: 10 }" placeholder=""></textarea>
+                <textarea nz-input formControlName="content" [nzAutosize]="{ minRows: 3, maxRows: 10 }"
+                    placeholder=""></textarea>
             </nz-form-control>
         </nz-form-item>
     </form>
+    <nz-divider></nz-divider>
+    <button nz-button nzType="primary" (click)="_submitForm()" [nzLoading]="loading">保存</button>
+</div>
+
+<div *ngIf="showDetail">
+    <nz-descriptions [nzColumn]="1">
+        <nz-descriptions-item nzTitle="图片"><img nz-image [nzSrc]="editData.img_url" alt="" />
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="公告内容">
+            <pre>{{editData.content}}</pre>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="创建时间">{{editData.create_time}}</nz-descriptions-item>
+    </nz-descriptions>
 </div>
