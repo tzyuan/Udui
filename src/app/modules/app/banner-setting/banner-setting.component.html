@@ -1,1 +1,35 @@
-<p>banner-setting works!</p>
+<button nz-button nzType="primary" (click)="add()">新建Banner公告</button>
+<nz-divider></nz-divider>
+<nz-table #nzTable [nzShowTotal]="totalTemplate" [nzData]="bannerData" nzFrontPagination="false" [nzLoading]="loading"
+          nzSize="small" [(nzPageIndex)]="page.index" [(nzPageSize)]="page.size" [nzTotal]="page.total"
+          (nzPageIndexChange)="pageIndexChange($event)">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>图片</th>
+            <th>内容</th>
+            <th>创建时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let i of nzTable.data">
+            <td>{{i.id}}</td>
+            <td>
+                <img nz-image width="200px" [nzSrc]="i.img_url" alt="" />
+            </td>
+            <td>
+                <p style="width: 500px;margin:0;" nz-typography nzEllipsis [nzEllipsisRows]="2">{{i.content}}</p>
+            </td>
+            <td>
+                {{i.create_time}}
+            </td>
+            <td>
+                <a nz-typography>编辑</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTemplate>
+    共{{page.total}}条
+</ng-template>

@@ -1,0 +1,22 @@
+<div style="width: 500px;">
+    <form nz-form [formGroup]="bannerForm" nzLayout="horizontal">
+        <nz-form-item nzFlex>
+            <nz-form-label nzRequired>图片</nz-form-label>
+            <nz-form-control>
+                <nz-upload nzAction="/admin/bank-card-order/upload-img" nzListType="picture"
+                           [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1">
+                    <button nz-button>
+                        <span nz-icon nzType="upload"></span>
+                        Upload
+                    </button>
+                </nz-upload>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
+            <nz-form-label nzRequired>内容</nz-form-label>
+            <nz-form-control>
+                <textarea nz-input formControlName="content" [nzAutosize]="{ minRows: 3, maxRows: 10 }" placeholder=""></textarea>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>

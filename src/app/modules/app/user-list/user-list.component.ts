@@ -20,6 +20,13 @@ export class UserListComponent implements OnInit {
   searchData = {
     username: ''
   }
+  sort: any = {};
+  balanceSortChange = (e: any) => {
+    if (e === 'ascend') { this.sort.balance = 'asc'; }
+    if (e === 'ascend') { this.sort.balance = 'desc'; }
+    if (e === null) { delete this.sort.balance; }
+    
+  }
   resetSearch = () => {
     this.searchData = {
       username: '',

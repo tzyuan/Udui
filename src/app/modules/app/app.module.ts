@@ -6,13 +6,15 @@ import { CustomerServiceComponent } from './customer-service/customer-service.co
 import { UserListComponent } from './user-list/user-list.component';
 import { BannerSettingComponent } from './banner-setting/banner-setting.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { BannerFormComponent } from './banner-form/banner-form.component';
 
 
 @NgModule({
   declarations: [
     CustomerServiceComponent,
     UserListComponent,
-    BannerSettingComponent
+    BannerSettingComponent,
+    BannerFormComponent
   ],
   imports: [
     CommonModule,

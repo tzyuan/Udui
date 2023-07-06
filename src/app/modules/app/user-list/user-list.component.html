@@ -17,13 +17,13 @@
     </nz-form-item>
 </div>
 <nz-divider></nz-divider>
-<nz-table #nzTable [nzShowTotal]="totalTemplate" [nzData]="appUserData" nzFrontPagination="false"
-    [nzLoading]="loading" nzSize="small" [(nzPageIndex)]="page.index" [(nzPageSize)]="page.size" [nzTotal]="page.total"
-    (nzPageIndexChange)="pageIndexChange($event)">
+<nz-table #nzTable [nzShowTotal]="totalTemplate" [nzData]="appUserData" nzFrontPagination="false" [nzLoading]="loading"
+          nzSize="small" [(nzPageIndex)]="page.index" [(nzPageSize)]="page.size" [nzTotal]="page.total"
+          (nzPageIndexChange)="pageIndexChange($event)">
     <thead>
         <tr>
             <th>用户名</th>
-            <th>余额</th>
+            <th [nzSortFn]="true" (nzSortOrderChange)="balanceSortChange($event)">余额</th>
             <th>trc_url</th>
             <th>注册时间</th>
         </tr>
