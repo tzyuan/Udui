@@ -1,11 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import * as moment from 'moment';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { BankOrderBatchComponent } from '../bank-order-batch/bank-order-batch.component';
 import { HttpClient } from '@angular/common/http';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { forkJoin } from 'rxjs';
+import * as moment from 'moment';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 @Component({
@@ -59,16 +58,19 @@ export class BankOrderComponent implements OnInit {
     user: string;
     order_id: string;
     fund_type: number | null;
+    range: (Date | null)[];
   } = {
       user: '',
       order_id: '',
       fund_type: null,
+      range:[]
     }
   resetSearch = () => {
     this.searchData = {
       user: '',
       order_id: '',
-      fund_type: null
+      fund_type: null,
+      range:[]
     }
   }
   search = () => {
@@ -105,7 +107,10 @@ export class BankOrderComponent implements OnInit {
     if (this.searchData.fund_type != null) {
       params.fund_type = this.searchData.fund_type;
     }
-
+    if (this.searchData.range[0] != null && this.searchData.range[1] != null) {
+      params.start_date = moment(this.searchData.range[0]).format('YYYY-MM-DD');
+      params.end_date = moment(this.searchData.range[1]).format('YYYY-MM-DD');
+    }
 
 
     this.http.get<any>('/admin/bank-card-orders', { params }).subscribe({

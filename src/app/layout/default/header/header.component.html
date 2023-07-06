@@ -35,7 +35,11 @@
 <div class="header">
     <nz-space nzAlign="center">
         <div *nzSpaceItem class="space-item" >你好,{{userName}}</div>
-        <div *nzSpaceItem class="space-item btn" (click)="googleCode()">查看谷歌验证二维码</div>
+        <div *nzSpaceItem class="space-item btn" (click)="googleCode(googoleModalContent)">查看谷歌验证二维码</div>
         <div *nzSpaceItem class="space-item btn" (click)="logout()">退出登录</div>
     </nz-space>
 </div>
+
+<ng-template #googoleModalContent>
+    <input nz-input [(ngModel)]="one_code" placeholder="谷歌验证码">
+</ng-template>

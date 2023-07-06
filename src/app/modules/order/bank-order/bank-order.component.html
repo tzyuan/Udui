@@ -1,10 +1,4 @@
 <div nz-form nzLayout="inline">
-    <!-- <nz-form-item nzFlex>
-        <nz-form-label>用户</nz-form-label>
-        <nz-form-control>
-            <input nz-input [(ngModel)]="searchData.user" placeholder="账号名称">
-        </nz-form-control>
-    </nz-form-item> -->
     <nz-form-item nzFlex>
         <nz-form-label>订单号</nz-form-label>
         <nz-form-control>
@@ -19,7 +13,12 @@
                 <nz-option *ngFor="let item of fundTypeData" [nzLabel]="item.label" [nzValue]="item.value">
                 </nz-option>
             </nz-select>
-
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzFlex>
+        <nz-form-label>创建时间</nz-form-label>
+        <nz-form-control>
+            <nz-range-picker [(ngModel)]="searchData.range" name="value"></nz-range-picker>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item nzFlex>

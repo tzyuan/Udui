@@ -17,7 +17,12 @@
       <input nz-input [(ngModel)]="searchData.pay_order_no" placeholder="">
     </nz-form-control>
   </nz-form-item>
-  
+  <nz-form-item nzFlex>
+    <nz-form-label>创建时间</nz-form-label>
+    <nz-form-control>
+        <nz-range-picker [(ngModel)]="searchData.range" name="value"></nz-range-picker>
+    </nz-form-control>
+</nz-form-item>
   <nz-form-item nzFlex>
     <nz-form-control>
       <nz-space>

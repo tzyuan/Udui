@@ -12,6 +12,7 @@ export class UserListComponent implements OnInit {
   ) { }
   appUserData: any[] = [];
   loading = false;
+  sort = '';
   page = {
     index: 1,
     size: 20,
@@ -20,12 +21,11 @@ export class UserListComponent implements OnInit {
   searchData = {
     username: ''
   }
-  sort: any = {};
   balanceSortChange = (e: any) => {
-    if (e === 'ascend') { this.sort.balance = 'asc'; }
-    if (e === 'ascend') { this.sort.balance = 'desc'; }
-    if (e === null) { delete this.sort.balance; }
-    
+    if (e === 'ascend') { this.sort = 'asc'; }
+    if (e === 'descend') { this.sort = 'desc'; }
+    if (e === null) { this.sort = ''; }
+    this.getData();
   }
   resetSearch = () => {
     this.searchData = {
@@ -43,6 +43,9 @@ export class UserListComponent implements OnInit {
   getData = () => {
     let params: any = {
       page: this.page.index
+    }
+    if (this.sort != '') {
+      params.sort = this.sort;
     }
 
     if (this.searchData.username.trim() != '') {

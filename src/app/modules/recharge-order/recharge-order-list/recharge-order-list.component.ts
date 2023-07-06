@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { RechargeOrderDetailComponent } from '../recharge-order-detail/recharge-order-detail.component';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-recharge-order-list',
@@ -30,16 +31,18 @@ export class RechargeOrderListComponent implements OnInit {
         size: 20,
         total: 0
     }
-    searchData = {
+    searchData: any = {
         merchant_id: '',
         pay_order_no: '',
-        app_user: ''
+        app_user: '',
+        range: []
     }
     resetSearch = () => {
         this.searchData = {
             merchant_id: '',
             pay_order_no: '',
-            app_user: ''
+            app_user: '',
+            range: []
         }
     }
     search = () => {
@@ -64,6 +67,10 @@ export class RechargeOrderListComponent implements OnInit {
         }
         if (this.searchData.app_user.trim() != '') {
             params.app_user = this.searchData.app_user.trim();
+        }
+        if (this.searchData.range[0] != null && this.searchData.range[1] != null) {
+            params.start_date = moment(this.searchData.range[0]).format('YYYY-MM-DD');
+            params.end_date = moment(this.searchData.range[1]).format('YYYY-MM-DD');
         }
 
 

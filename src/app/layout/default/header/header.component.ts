@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CookiesService } from 'src/app/shared/services/cookies/cookies.service';
 import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/shared/services/layout/layout.service';
@@ -19,6 +19,7 @@ export class LayoutDefaultHeaderComponent implements OnInit {
     private modal: NzModalService,
   ) { }
   userName = this.cookies.getCookie('username');
+  one_code = '';
   modules = [
     { title: 'module1' },
     { title: 'module2' },
@@ -37,12 +38,21 @@ export class LayoutDefaultHeaderComponent implements OnInit {
       }
     })
   }
-  googleCode = () => {
+  googleCode = (telContent: TemplateRef<{}>) => {
+    this.one_code = '';
     this.modal.create({
-      nzTitle: '谷歌验证二维码',
-      nzContent: GoogleQrcodeComponent,
-      nzCancelText: null
+      nzTitle: '验证二维码',
+      nzContent: telContent,
+      nzOnOk: () => {
+        this.modal.create({
+          nzTitle: '谷歌验证二维码',
+          nzContent: GoogleQrcodeComponent,
+          nzComponentParams: { one_code: this.one_code },
+          nzCancelText: null
+        })
+      }
     })
+
   }
 
 
